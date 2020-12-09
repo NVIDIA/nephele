@@ -1,0 +1,104 @@
+ClusterName={{ slurm_cluster_name }}
+
+# SLURMCTLD
+{% for host in groups["slurm_controller"] %}
+SlurmctldHost={{ host }}
+{% endfor %}
+SlurmUser=slurm
+SlurmctldPort=6817
+SlurmctldPidFile={{ _runstate_dir }}/slurmctld.pid
+StateSaveLocation={{ _localstate_dir }}/slurmctld
+SlurmctldLogFile={{ _log_dir }}/slurmctld.log
+SlurmctldDebug=info
+SlurmSchedLogFile={{ _log_dir }}/sched.log
+SlurmSchedLogLevel=0
+SlurmctldTimeout=300
+
+# SLURMD
+SlurmdUser=root
+SlurmdPort=6818
+SlurmdPidFile={{ _runstate_dir }}/slurmd.pid
+SlurmdSpoolDir={{ _localstate_dir }}/slurmd
+SlurmdLogFile={{ _log_dir }}/slurmd.log
+SlurmdDebug=info
+SlurmdTimeout=300
+ReturnToService=1
+
+# ACCOUNTING
+JobCompType=jobcomp/filetxt
+JobCompLoc={{ _log_dir }}/jobs.log
+JobAcctGatherType=jobacct_gather/none
+AccountingStorageType=accounting_storage/none
+
+# SCHEDULING
+SelectType=select/cons_tres
+SelectTypeParameters=CR_Core_Memory,CR_ONE_TASK_PER_CORE
+GresTypes=gpu
+SchedulerType=sched/backfill
+SchedulerParameters=nohold_on_prolog_fail,Ignore_NUMA,enable_user_top
+DependencyParameters=kill_invalid_depend
+PreemptType=preempt/partition_prio
+PreemptMode=REQUEUE
+JobRequeue=0
+PreemptExemptTime=00:30:00
+PriorityType=priority/basic
+EnforcePartLimits=ANY
+
+# TASKS
+KillOnBadExit=1
+ProctrackType=proctrack/cgroup
+TaskPlugin=task/affinity,task/cgroup
+TaskPluginParam=Sched,None,Autobind=None
+PropagateResourceLimitsExcept=MEMLOCK,NOFILE,CORE
+PrologFlags=Alloc,Serial,Contain
+Prolog={{ _lib_dir }}/prolog.sh
+Epilog={{ _lib_dir }}/epilog.sh
+UnkillableStepProgram={{ _lib_dir }}/unkillable.sh
+
+# GOVERNORS
+CpuFreqDef=Performance
+GpuFreqDef=high
+
+# SECURITY
+AuthType=auth/munge
+CredType=cred/munge
+MCSPlugin=mcs/none
+
+# NETWORKING
+SwitchType=switch/none
+TopologyPlugin=topology/none
+
+# HEALTHCHECKS
+HealthCheckNodeState=IDLE
+HealthCheckProgram={{ _lib_dir }}/healthcheck.sh
+HealthCheckInterval=3600
+
+# TIMERS
+ResumeTimeout=1200       # max time to allow reboot
+MessageTimeout=60        # max RTT for slurm messages
+InactiveLimit=0          # max time to wait for unresponsive srun/salloc
+MinJobAge=300            # time before purging completed jobs from cache
+Waittime=0               # max time for srun to wait for remaining tasks
+CompleteWait=0           # time to wait before starting a new job
+KillWait=30              # time to wait before force killing a task
+UnkillableStepTimeout=60 # time to wait before deciding that a task is unkillable
+
+# MPI
+MpiDefault=pmix
+TmpFS={{ _tmp_dir }}
+
+# MISC
+DebugFlags=CPU_Bind,Gres
+MailProg=/usr/bin/mail
+RebootProgram=/sbin/reboot
+
+# PARTITIONS
+PartitionName=DEFAULT State=UP MaxTime=INFINITE DefaultTime=INFINITE PriorityTier=1 OverSubscribe=EXCLUSIVE DefMemPerNode=0 GraceTime=0
+{% for part in slurm_partitions | intersect(groups) %}
+PartitionName={{ part }} Nodes={{ groups[part] | join(',') }}
+{% endfor %}
+
+# NODES
+{% for node in groups['slurm_compute'] %}
+{{ hostvars[node].node_info }} Gres=gpu:{{ hostvars[node].ansible_local.gpus.count }}
+{% endfor %}

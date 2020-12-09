@@ -1,0 +1,123 @@
+# Copyright (c) 2020, NVIDIA CORPORATION. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+- name: copy slurm config
+  copy:
+    src: "{{ item }}"
+    dest: "{{ _sysconf_dir }}/"
+    mode: 0644
+  with_items:
+    - etc/slurm/gres.conf
+    - etc/slurm/cgroup.conf
+    - etc/slurm/cgroup_allowed_devices_file.conf
+  notify:
+    - restart slurmd
+  tags: config
+
+- name: copy slurm programs
+  template:
+    src: "{{ item }}"
+    dest: "{{ _lib_dir }}/"
+    mode: 0755
+  with_items:
+    - usr/lib/slurm/prolog.sh
+    - usr/lib/slurm/epilog.sh
+    - usr/lib/slurm/unkillable.sh
+    - usr/lib/slurm/healthcheck.sh
+  tags: config
+
+- name: delete prologs and epilogs
+  file:
+    dest: "{{ _sysconf_dir }}/{{ item }}"
+    state: absent
+  with_items:
+    - prolog.d/
+    - epilog.d/
+  tags: config
+
+- name: copy prologs
+  template:
+    src: "{{ item }}"
+    dest: "{{ _sysconf_dir }}/prolog.d/"
+    mode: 0755
+  with_fileglob:
+    - templates/etc/slurm/prolog.d/*
+  tags: config
+
+- name: copy epilogs
+  template:
+    src: "{{ item }}"
+    dest: "{{ _sysconf_dir }}/epilog.d/"
+    mode: 0755
+  with_fileglob:
+    - templates/etc/slurm/epilog.d/*
+  tags: config
+
+- name: copy healthchecks
+  template:
+    src: "{{ item }}"
+    dest: "{{ _sysconf_dir }}/healthcheck.d/"
+    mode: 0755
+  with_fileglob:
+    - templates/etc/slurm/healthcheck.d/*
+  tags: config
+
+# FIXME Ubuntu package specific
+- name: configure PMIx
+  blockinfile:
+    path: /etc/default/slurmd
+    create: yes
+    block: |
+      PMIX_MCA_ptl=^usock
+      PMIX_MCA_psec=none
+      PMIX_SYSTEM_TMPDIR=/var/empty
+      PMIX_MCA_gds=hash
+      HWLOC_COMPONENTS=-opencl
+  notify:
+    - restart slurmd
+  tags: config
+
+- name: create tmp directory
+  file:
+    path: "{{ _tmp_dir }}"
+    state: directory
+    mode: 0755
+
+- name: start slurmd
+  service:
+    name: slurmd
+    enabled: yes
+    state: started
+
+- name: remove pam_systemd
+  community.general.pamd:
+    name: common-session
+    type: session
+    control: optional
+    module_path: pam_systemd.so
+    module_arguments: ''
+    state: absent
+
+- name: configure pam_slurm_adopt
+  community.general.pamd:
+    name: sshd
+    type: session
+    control: '[success=ok ignore=ignore module_unknown=ignore default=bad]'
+    module_path: pam_selinux.so
+    state: before
+    new_type: account
+    new_control: required
+    new_module_path: pam_slurm_adopt.so
+    module_arguments: 'action_no_jobs=ignore'

@@ -1,0 +1,47 @@
+# Copyright (c) 2020, NVIDIA CORPORATION. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+- name: install pyxis config
+  file:
+    path: "{{ _sysconf_dir }}/plugstack.conf.d/pyxis.conf"
+    src: /usr/share/pyxis/pyxis.conf
+    state: link
+  notify:
+    - restart slurmctld
+    - restart slurmd
+  tags: pyxis
+
+- name: copy pyxis entrypoint
+  copy:
+    src: usr/share/pyxis/entrypoint
+    dest: /usr/share/pyxis/
+    mode: 0755
+  tags: pyxis
+
+- name: install enroot entrypoint
+  copy:
+    dest: "/etc/enroot/mounts.d/90-pyxis.fstab"
+    content: "/usr/share/pyxis/entrypoint /etc/rc.local none x-create=file,bind,ro,nosuid,nodev,noexec,nofail,silent"
+  tags: pyxis
+
+- name: install extra enroot hooks
+  file:
+    path: "/etc/enroot/hooks.d/{{ item }}"
+    src: "/usr/share/enroot/hooks.d/{{ item }}"
+    state: link
+  with_items:
+    - "50-slurm-pmi.sh"
+    - "50-slurm-pytorch.sh"
+  tags: pyxis

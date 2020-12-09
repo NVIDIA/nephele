@@ -1,0 +1,54 @@
+# Copyright (c) 2020, NVIDIA CORPORATION. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+- name: purge old slurm packages
+  apt:
+    name: slurm
+    state: absent
+    purge: yes
+
+- name: packages for every nodes
+  apt:
+    name: munge
+    state: "{{ slurm_package_state }}"
+
+- name: packages for client nodes
+  apt:
+    deb: "{{ item }}"
+    state: "{{ slurm_package_state }}"
+  with_items: "{{ slurm_client_deb_packages }}"
+  when: is_client
+
+- name: packages for control nodes
+  apt:
+    deb: "{{ item }}"
+    state: "{{ slurm_package_state }}"
+  with_items: "{{ slurm_control_deb_packages }}"
+  when: is_controller
+
+- name: packages for compute nodes
+  apt:
+    deb: "{{ item }}"
+    state: "{{ slurm_package_state }}"
+  with_items: "{{ slurm_compute_deb_packages }}"
+  when: is_compute
+
+- name: packages for pyxis
+  apt:
+    deb: "{{ item }}"
+    state: "{{ slurm_package_state }}"
+  with_items: "{{ slurm_pyxis_deb_packages }}"
+  when: (is_controller or is_compute) and slurm_install_pyxis
+  tags: pyxis

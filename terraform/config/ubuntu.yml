@@ -1,0 +1,58 @@
+#cloud-config
+
+# Copyright (c) 2020, NVIDIA CORPORATION. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+ssh_deletekeys: true
+disable_root: true
+ssh_pwauth: false
+
+ssh_keys:
+  ed25519_private: ${ssh_privkey_host}
+  ed25519_public: ${ssh_pubkey_host}
+
+ssh_authorized_keys:
+  - ${ssh_pubkey}
+
+user:
+  name: "${ssh_user}"
+  lock_passwd: true
+  sudo: ALL=(ALL) NOPASSWD:ALL
+
+apt:
+  conf: |
+    APT::Install-Recommends "0";
+    APT::Install-Suggests "0";
+  sources_list: |
+    deb [arch=amd64] $PRIMARY $RELEASE main universe
+    deb [arch=amd64] $PRIMARY $RELEASE-updates main universe
+    deb [arch=amd64] $PRIMARY $RELEASE-security main universe
+
+package_update: true
+package_upgrade: true
+packages:
+  - vim-tiny
+  - bsd-mailx
+debconf_selections:
+  postfix: |
+    postfix postfix/destinations string localhost.localdomain,localhost
+    posfixpostfix postfix/inet_interfaces string loopback-only
+    postfix postfix/mailname string localhost.localdomain
+    postfix postfix/main_mailer_type string Local only
+
+power_state:
+  delay: "now"
+  mode: reboot
+  timeout: 30
+  condition: True

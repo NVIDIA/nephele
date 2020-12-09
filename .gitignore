@@ -1,0 +1,17 @@
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+ssh/config
+ssh/host_ed25519
+ssh/host_ed25519.pub
+ssh/id_rsa
+ssh/id_rsa.pub
+ssh/known_hosts
+ansible/inventory
+ansible/galaxy-roles
+ansible/.vault-password
+packages/*.dsc
+packages/*.tar.xz
+packages/*.stamp
+packages/*.deb
+packages/*.sqsh

@@ -1,0 +1,49 @@
+# Copyright (c) 2020, NVIDIA CORPORATION. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+- name: create munge key
+  template:
+    src: etc/munge/munge.key
+    dest: /etc/munge/
+    mode: 0400
+    owner: munge
+  notify:
+    - restart munge
+
+- name: start munge
+  service:
+    name: munge
+    enabled: yes
+    state: started
+
+- name: gather node information
+  shell: slurmd -C
+  register: node_info
+  when: is_compute
+
+- set_fact: node_info="{{ node_info.stdout.split('\n') | first }}"
+  when: is_compute
+
+- name: create slurm config
+  template:
+    src: etc/slurm/slurm.conf
+    dest: "{{ _sysconf_dir }}/slurm.conf"
+  vars:
+    default_config: "{{ lookup('template', 'etc/slurm/slurm.conf.default') }}"
+    user_config: "{{ slurm_config | default('') }}"
+  notify:
+    - restart slurmctld
+    - restart slurmd
+  tags: config

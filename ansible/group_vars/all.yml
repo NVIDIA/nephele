@@ -1,0 +1,86 @@
+# Copyright (c) 2020, NVIDIA CORPORATION. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+#software_packages_to_install:
+#software_packages_to_remove:
+#system_envvars:
+
+nvidia_driver_package_version: "455.45.01-1"
+nvidia_driver_skip_reboot: yes
+
+mofed_package_version: "5.1-2.3.7.1"
+
+slurm_install_pyxis: yes
+slurm_package_version: "20.02.6.1+nvidia-1"
+slurm_pyxis_package_version: "0.9.1-1"
+
+slurm_control_deb_packages:
+  - "/var/tmp/nvslurm-plugins_{{ slurm_package_version }}_amd64.deb"
+  - "/var/tmp/nvslurm-control_{{ slurm_package_version }}_amd64.deb"
+slurm_compute_deb_packages:
+  - "/var/tmp/nvslurm-plugins_{{ slurm_package_version }}_amd64.deb"
+  - "/var/tmp/nvslurm-utils_{{ slurm_package_version }}_amd64.deb"
+  - "/var/tmp/nvslurm-compute_{{ slurm_package_version }}_amd64.deb"
+  - "/var/tmp/libslurm35_{{ slurm_package_version }}_amd64.deb"
+  - "/var/tmp/libpam-slurm-adopt_{{ slurm_package_version }}_amd64.deb"
+slurm_client_deb_packages:
+  - "/var/tmp/nvslurm-plugins_{{ slurm_package_version }}_amd64.deb"
+  - "/var/tmp/nvslurm-utils_{{ slurm_package_version }}_amd64.deb"
+slurm_pyxis_deb_packages:
+  - "/var/tmp/nvslurm-plugin-pyxis_{{ slurm_pyxis_package_version }}_amd64.deb"
+
+#slurm_cluster_name:
+#slurm_munge_key:
+slurm_config: |
+  PartitionName=batch Nodes=ALL Default=YES
+  PartitionName=hp Nodes=ALL PriorityTier=9
+slurm_partitions:
+  - x4v100
+
+bootstrap_tmpfs:
+  - path: /tmp
+    mode: 1777
+  - path: /scratch
+    mode: 755
+    user: "{{ ansible_env.SUDO_UID }}"
+    group: "{{ ansible_env.SUDO_GID }}"
+
+bootstrap_dirs:
+  - path: /var/cache/enroot
+    mode: 770
+    group: "{{ ansible_env.SUDO_GID }}"
+
+enroot_config: |
+  ENROOT_CACHE_PATH=/var/cache/enroot
+  ENROOT_RUNTIME_PATH=/run/user/$EUID/enroot/run
+  ENROOT_DATA_PATH=/run/user/$EUID/enroot/data
+  ENROOT_SQUASH_OPTIONS="-noI -noD -noF -noX -no-duplicates"
+  ENROOT_MOUNT_HOME=yes
+  ENROOT_RESTRICT_DEV=yes
+  ENROOT_ROOTFS_WRITABLE=yes
+  ENROOT_ZSTD_OPTIONS=--fast
+
+#enroot_hook_config_files:
+#enroot_mount_config_files:
+enroot_environ_config_files:
+  - filename: 50-visible-devices.env
+    content: |
+      NVIDIA_VISIBLE_DEVICES=all
+      NVIDIA_DRIVER_CAPABILITIES=all
+#     MELLANOX_VISIBLE_DEVICES=all
+
+nv_restrict_profiling_to_admin_users: 0
+perf_event_paranoid_level: '-1'
+kptr_restrict_level: '0'

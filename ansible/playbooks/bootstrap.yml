@@ -1,0 +1,54 @@
+# Copyright (c) 2020, NVIDIA CORPORATION. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: set hostname
+      hostname:
+        name: "{{ inventory_hostname }}"
+
+    - name: set hosts
+      include_role:
+        name: lukeyeager.hosts
+      vars:
+        hosts_add_default_ipv4: false
+        hosts_add_ansible_managed_hosts: true
+
+    - name: install software packages
+      include_role:
+        name: software_packages
+
+    - name: set system envvars
+      include_role:
+        name: system_envvars
+
+    - name: mount tmpfs
+      mount:
+        path: "{{ item.path }}"
+        src: tmpfs
+        fstype: tmpfs
+        state: mounted
+        opts: rw,nosuid,nodev,relatime,mode={{ item.mode | default('755') }},uid={{ item.user | default('root') }},gid={{ item.group | default('root') }}
+      with_items: "{{ bootstrap_tmpfs }}"
+
+    - name: create directories
+      file:
+        path: "{{ item.path }}"
+        state: directory
+        owner: "{{ item.user | default('root') }}"
+        group: "{{ item.group | default('root') }}"
+        mode: "{{ item.mode | default('755') }}"
+      with_items: "{{ bootstrap_dirs }}"
