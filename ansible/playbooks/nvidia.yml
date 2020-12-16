@@ -64,4 +64,9 @@
           enabled: yes
           state: started
           daemon_reload: true
+
+      - name: install fabric manager
+        include_role:
+          name: nvidia-fabric-manager
+
       when: ansible_local.gpus.count

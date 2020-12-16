@@ -17,10 +17,12 @@
 #software_packages_to_remove:
 #system_envvars:
 
-nvidia_driver_package_version: "455.45.01-1"
+nvidia_driver_ubuntu_install_from_cuda_repo: yes
 nvidia_driver_skip_reboot: yes
+nvidia_driver_package_version: "455.45.01-1"
+nvidia_fabric_manager_package_version: "455.45.01-1"
 
-mofed_package_version: "5.1-2.3.7.1"
+mofed_package_version: "5.1-2.5.8.0"
 
 slurm_install_pyxis: yes
 slurm_package_version: "20.02.6.1+nvidia-1"

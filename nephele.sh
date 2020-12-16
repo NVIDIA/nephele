@@ -75,8 +75,8 @@ create() {
 
     echo "Provisioning instances..."
     ansible-playbook playbooks/bootstrap.yml
-    ansible-playbook playbooks/mellanox.yml
     ansible-playbook playbooks/nvidia.yml
+    ansible-playbook playbooks/mellanox.yml
     ansible-playbook playbooks/containers.yml
     ansible-playbook playbooks/slurm.yml
     popd
