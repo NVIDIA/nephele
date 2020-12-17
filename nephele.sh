@@ -51,7 +51,7 @@ init() {
 
 create() {
     export TF_VAR_region="${CLOUD_REGION}"
-    export TF_VAR_replicas="{ x4v100 = ${REPLICAS_x4v100} }" # FIXME doesn't seem to work for some reason
+    export TF_VAR_replicas="{ x4v100 = ${REPLICAS_x4v100}, x8a100 = ${REPLICAS_x8a100} }" # FIXME doesn't seem to work for some reason
 
     pushd terraform
     echo "Creating ${CLOUD_PROVIDER} cluster..."

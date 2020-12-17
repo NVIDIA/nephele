@@ -19,3 +19,7 @@ output "login" {
 output "compute-x4v100" {
     value = join(",", module.instances_x4v100.private_ips)
 }
+
+output "compute-x8a100" {
+    value = join(",", module.instances_x8a100.private_ips)
+}

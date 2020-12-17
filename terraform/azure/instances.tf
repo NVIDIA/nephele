@@ -53,3 +53,21 @@ module "instances_x4v100" {
   subnet      = azurerm_subnet.default
   firewall    = azurerm_network_security_group.default
 }
+
+module "instances_x8a100" {
+  source = "./instance"
+
+  prefix      = "${local.cluster_id}-x8a100"
+  type        = "Standard_ND96asr_v4"
+  replicas    = var.replicas.x8a100
+  public      = false
+  preemptible = var.preemptible
+
+  ssh         = var.ssh
+  vmi         = data.azurerm_platform_image.ubuntu_2004
+  config      = data.template_cloudinit_config.ubuntu_2004.rendered
+  region      = azurerm_resource_group.default
+  group       = azurerm_proximity_placement_group.default
+  subnet      = azurerm_subnet.default
+  firewall    = azurerm_network_security_group.default
+}

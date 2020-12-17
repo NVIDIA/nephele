@@ -49,7 +49,7 @@ slurm_config: |
   PartitionName=batch Nodes=ALL Default=YES
   PartitionName=hp Nodes=ALL PriorityTier=9
 slurm_partitions:
-  - x4v100
+  - x8a100
 
 bootstrap_tmpfs:
   - path: /tmp
