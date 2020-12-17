@@ -66,7 +66,7 @@ create() {
 
     pushd ansible
     echo "Waiting for instances..."
-    while ! ansible all -a "cloud-init status --wait"; do echo "Retrying in 5s"; sleep 5; done
+    while ! ansible all -a "cloud-init status --wait"; do echo "Retrying in 10s"; sleep 10; done
     sleep 10 # wait for the reboot
     ansible all -m wait_for_connection
 
