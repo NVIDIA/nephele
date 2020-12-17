@@ -13,20 +13,12 @@
 # limitations under the License.
 
 ---
-- hosts: all
-  become: true
-  tasks:
-    - name: install custom facts module
-      include_role:
-        name: facts
+- name: ubuntu tasks
+  include_tasks: ubuntu.yml
+  when: ansible_distribution == 'Ubuntu'
 
-    - block:
-      - name: install mofed
-        include_role:
-          name: mofed
-
-      - name: install gpudirect
-        include_role:
-          name: mellanox-gpudirect
-
-      when: ansible_local.hcas.count
+- name: load gpudirect driver
+  service:
+    name: nv_peer_mem
+    enabled: yes
+    state: started

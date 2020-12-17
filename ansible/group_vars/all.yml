@@ -30,10 +30,13 @@ nvidia_gdrcopy_deb_packages:
 
 mofed_package_version: "5.1-2.5.8.0"
 
+mellanox_gpudirect_deb_packages:
+  - "/var/tmp/nvidia-peer-memory-dkms_1.1-0_all.deb"
+  - "/var/tmp/nvidia-peer-memory_1.1-0_all.deb"
+
 slurm_install_pyxis: yes
 slurm_package_version: "20.02.6.1+nvidia-1"
 slurm_pyxis_package_version: "0.9.1-1"
-
 slurm_control_deb_packages:
   - "/var/tmp/nvslurm-plugins_{{ slurm_package_version }}_amd64.deb"
   - "/var/tmp/nvslurm-control_{{ slurm_package_version }}_amd64.deb"

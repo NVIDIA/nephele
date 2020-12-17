@@ -29,9 +29,11 @@
 - name: install packages
   apt:
     name:
+      - libc6-dev # XXX DKMS will fail without this
       - mlnx-ofed-kernel-dkms
       - mlnx-ofed-kernel-utils
       - rdma-core
       - ibverbs-utils
+      - ibverbs-providers
     state: "{{ mofed_package_state }}"
     update_cache: yes

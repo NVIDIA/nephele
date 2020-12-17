@@ -16,3 +16,9 @@
 - name: ubuntu tasks
   include_tasks: ubuntu.yml
   when: ansible_distribution == 'Ubuntu'
+
+- name: configure ib devices
+  service:
+    name: openibd
+    enabled: yes
+    state: started

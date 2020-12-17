@@ -13,20 +13,8 @@
 # limitations under the License.
 
 ---
-- hosts: all
-  become: true
-  tasks:
-    - name: install custom facts module
-      include_role:
-        name: facts
-
-    - block:
-      - name: install mofed
-        include_role:
-          name: mofed
-
-      - name: install gpudirect
-        include_role:
-          name: mellanox-gpudirect
-
-      when: ansible_local.hcas.count
+- name: install packages
+  apt:
+    deb: "{{ item }}"
+    state: "{{ mellanox_gpudirect_package_state }}"
+  with_items: "{{ mellanox_gpudirect_deb_packages }}"
