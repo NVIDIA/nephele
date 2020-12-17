@@ -78,6 +78,7 @@ resource "azurerm_linux_virtual_machine" "default" {
     name                 = "${var.prefix}-${count.index}-disk"
     storage_account_type = "Standard_LRS"
     caching              = "ReadOnly"
+    disk_size_gb         = "2000"
 
     # Not supported on GPU instances
     #diff_disk_settings {
