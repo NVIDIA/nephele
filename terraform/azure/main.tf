@@ -26,7 +26,7 @@ resource "random_pet" "generator" {
 }
 
 locals {
-  cluster_id = random_pet.generator.id
+  cluster_id = "nephele-${random_pet.generator.id}"
 }
 
 resource "azurerm_resource_group" "default" {
