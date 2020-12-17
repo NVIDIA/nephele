@@ -49,7 +49,7 @@ resource "azurerm_linux_virtual_machine" "default" {
   location                     = var.region.location
   size                         = var.type
   count                        = var.replicas
-  proximity_placement_group_id = var.group.id
+  proximity_placement_group_id = var.group != null ? var.group.id : null
   priority                     = var.preemptible ? "Spot" : "Regular"
   eviction_policy              = var.preemptible ? "Delete" : null
 

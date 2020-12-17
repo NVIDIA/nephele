@@ -31,7 +31,7 @@ module "instances_login" {
   vmi         = data.azurerm_platform_image.ubuntu_2004
   config      = data.template_cloudinit_config.ubuntu_2004.rendered
   region      = azurerm_resource_group.default
-  group       = azurerm_proximity_placement_group.default
+  group       = null
   subnet      = azurerm_subnet.default
   firewall    = azurerm_network_security_group.default
 }
