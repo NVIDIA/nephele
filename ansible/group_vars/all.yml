@@ -20,6 +20,8 @@
 nvidia_driver_ubuntu_install_from_cuda_repo: yes
 nvidia_driver_skip_reboot: yes
 nvidia_driver_package_version: "455.45.01-1"
+nvidia_driver_module_params: "options nvidia NVreg_EnablePCIERelaxedOrderingMode=1 NVreg_RegistryDwords=\"RmEnableNvlinkReservedTpCounters=1\" nv_cap_enable_devfs=0"
+
 nvidia_fabric_manager_package_version: "455.45.01-1"
 
 mofed_package_version: "5.1-2.5.8.0"
