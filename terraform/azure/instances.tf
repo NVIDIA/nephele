@@ -22,7 +22,7 @@ module "instances_login" {
   source = "./instance"
 
   prefix      = "${local.cluster_id}-login"
-  type        = "Standard_DS4_v2"
+  type        = "Standard_D16s_v3"
   replicas    = 1
   public      = true
   preemptible = false
