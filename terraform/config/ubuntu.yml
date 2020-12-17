@@ -34,6 +34,9 @@ apt:
   conf: |
     APT::Install-Recommends "0";
     APT::Install-Suggests "0";
+    APT::Periodic::Update-Package-Lists "0";
+    APT::Periodic::Unattended-Upgrade "0";
+    APT::Unattended-Upgrade::Package-Blacklist "*";
   sources_list: |
     deb [arch=amd64] $PRIMARY $RELEASE main universe
     deb [arch=amd64] $PRIMARY $RELEASE-updates main universe
