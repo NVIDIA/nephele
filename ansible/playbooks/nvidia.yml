@@ -69,4 +69,8 @@
         include_role:
           name: nvidia-fabric-manager
 
+      - name: install gdrcopy
+        include_role:
+          name: nvidia-gdrcopy
+
       when: ansible_local.gpus.count
