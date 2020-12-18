@@ -47,6 +47,7 @@ resource "azurerm_linux_virtual_machine" "default" {
   name                         = "${var.prefix}-${count.index}"
   resource_group_name          = var.region.name
   location                     = var.region.location
+  availability_set_id          = var.avail_zone != null ? var.avail_zone.id : null
   size                         = var.type
   count                        = var.replicas
   proximity_placement_group_id = var.group != null ? var.group.id : null

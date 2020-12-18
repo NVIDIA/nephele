@@ -22,5 +22,6 @@ variable "ssh" {}
 variable "vmi" {}
 variable "config" {}
 variable "subnet" {}
+variable "avail_zone" {}
 variable "firewall" {}
 variable "public" {}
