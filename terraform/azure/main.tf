@@ -17,7 +17,7 @@ terraform {
 }
 
 provider "azurerm" {
-  version = "~> 2.27"
+  version = "~> 2.41"
   features {}
 }
 
@@ -32,4 +32,9 @@ locals {
 resource "azurerm_resource_group" "default" {
   name     = "${local.cluster_id}-group"
   location = var.region
+
+  timeouts {
+    create = "3h"
+    delete = "3h"
+  }
 }
