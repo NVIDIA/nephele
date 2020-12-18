@@ -39,6 +39,7 @@
 - name: full-upgrade
   apt:
     upgrade: full
+  when: software_packages_full_upgrade
 
 - name: autoremove
   apt:
