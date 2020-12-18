@@ -90,7 +90,7 @@ enroot_environ_config_files:
     content: |
       NVIDIA_VISIBLE_DEVICES=all
       NVIDIA_DRIVER_CAPABILITIES=all
-#     MELLANOX_VISIBLE_DEVICES=all
+      MELLANOX_VISIBLE_DEVICES=all
 
 nv_restrict_profiling_to_admin_users: 0
 perf_event_paranoid_level: '-1'
