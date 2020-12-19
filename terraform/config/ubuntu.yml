@@ -54,6 +54,11 @@ debconf_selections:
     postfix postfix/mailname string localhost.localdomain
     postfix postfix/main_mailer_type string Local only
 
+runcmd:
+  - sed -i 's/#MaxSessions.*/MaxSessions 50/' /etc/ssh/sshd_config
+  - sed -i 's/#MaxStartups.*/MaxStartups 50:30:80/' /etc/ssh/sshd_config
+  - systemctl reload sshd
+
 power_state:
   delay: "now"
   mode: reboot
