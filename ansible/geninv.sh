@@ -25,6 +25,9 @@ declare -A groups
 
 while read type x hosts; do
     readarray -d, -t ips < <(printf "${hosts}")
+    
+    # Skip hosts that have an empty string
+    [[ "${hosts}" == "\"\"" ]] && continue
 
     if [[ "${type}" == *-* ]]; then
         groups[${type%%-*}]+=" ${type#*-} "
