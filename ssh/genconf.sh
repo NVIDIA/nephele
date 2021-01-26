@@ -40,6 +40,11 @@ while read type x hosts; do
     [ -z "${hosts}" ] && continue
 
     readarray -d, -t ips < <(printf "${hosts}")
+    
+    # Skip hosts that have an empty string
+    [[ "${hosts}" == "\"\"" ]] && continue
+    # Remove quotes from the hosts string
+    hosts=`echo $hosts | sed -s "s/^\(\(\"\(.*\)\"\)\|\('\(.*\)'\)\)\$/\\3\\5/g"`
 
     for i in "${!ips[@]}"; do
         printf "Host %s-%02d\n" "${type}" "${i}"
