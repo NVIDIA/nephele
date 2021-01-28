@@ -72,13 +72,18 @@ create() {
 
     echo "Uploading packages..."
     ansible all --list-hosts | sed 1d | xargs -P0 -n1 -i scp -F ../ssh/config ../packages/*.deb {}:/var/tmp
-
+    
+    echo "Copy over ssh keys
+    ansible all --list-hosts | sed 1d | xargs -P0 -n1 -i scp -F ../ssh/config ../ssh/id_rsa* {}:.ssh/.
+    
     echo "Provisioning instances..."
     ansible-playbook playbooks/bootstrap.yml
     ansible-playbook playbooks/nvidia.yml
     ansible-playbook playbooks/mellanox.yml
     ansible-playbook playbooks/containers.yml
     ansible-playbook playbooks/slurm.yml
+    ansible-playbook playbooks/nfs-server.yml
+    ansible-playbook playbooks/nfs-client.yml
     popd
 
     echo "Done"
