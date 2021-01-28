@@ -1,0 +1,40 @@
+---
+- name: ensure mountpoint exists
+  file:
+    path: '{{ item.mountpoint }}'
+    state: directory
+  with_items: '{{ nfs_mounts }}'
+  when: nfs_mounts|length
+  tags:
+    - nfs
+
+- name: configure /etc/fstab on clients
+  mount:
+    name: "{{ item.mountpoint }}"
+    src: "{{ item.server }}:{{ item.path }}"
+    opts: "{{ item.options }}"
+    fstype: nfs 
+    state: mounted
+  with_items: '{{ nfs_mounts }}'
+  when: nfs_mounts|length
+  tags:
+    - nfs
+
+- name: rhel 7 | install management prereq
+  yum:
+    name: "libsemanage-python"
+    state: present
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "7"
+
+- name: rhel 8 | install management prereq
+  yum:
+    name: "python3-libsemanage"
+    state: present
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "8"
+
+- name: rhel | enable nfs home directory usage
+  seboolean:
+    name: "use_nfs_home_dirs"
+    state: yes
+    persistent: yes
+  when: ansible_os_family == "RedHat"

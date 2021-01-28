@@ -1,0 +1,5 @@
+---
+- hosts: slurm_controller
+  become: yes
+  roles:
+    - { role: nfs, nfs_is_server: yes }

@@ -86,3 +86,34 @@ enroot_environ_config_files:
 nv_restrict_profiling_to_admin_users: 0
 perf_event_paranoid_level: '-1'
 kptr_restrict_level: '0'
+
+################################################################################
+# NFS                                                                          #
+################################################################################
+# Default exports:
+# - /home: shared home directories, needed for Open OnDemand and best practice
+# - /sw:   shared space for software installs, used for Spack or EasyBuild
+nfs_exports:
+  - path: /mnt/apps
+    options: "*(rw,sync,no_root_squash)"
+  - path: /mnt/data
+    options: "*(rw,sync,no_root_squash)"
+nfs_mounts:
+  - mountpoint: /apps
+    server: login-00
+    path: /mnt/apps
+    options: async,vers=3
+  - mountpoint: /data
+    server: login-00
+    path: /mnt/data
+    options: async,vers=3
+
+# Flags for enable/disable of NFS deployment
+#  - Set up an NFS server on nfs-server?
+slurm_enable_nfs_server: true
+#  - Mount NFS filesystems on nfs-clients?
+slurm_enable_nfs_client_nodes: true
+
+# Inventory host groups to use for NFS server or clients
+nfs_server_group: "slurm_controller"
+nfs_client_group: "slurm_client,slurm_compute"

@@ -1,0 +1,5 @@
+---
+- hosts: slurm_compute,slurm_client
+  become: yes
+  roles:
+    - { role: nfs, nfs_is_client: yes }

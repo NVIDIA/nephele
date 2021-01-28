@@ -73,7 +73,7 @@ create() {
     echo "Uploading packages..."
     ansible all --list-hosts | sed 1d | xargs -P0 -n1 -i scp -F ../ssh/config ../packages/*.deb {}:/var/tmp
     
-    echo "Copy over ssh keys
+    echo "Copy over ssh keys"
     ansible all --list-hosts | sed 1d | xargs -P0 -n1 -i scp -F ../ssh/config ../ssh/id_rsa* {}:.ssh/.
     
     echo "Provisioning instances..."
