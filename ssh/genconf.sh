@@ -39,7 +39,8 @@ EOF
 while read type x hosts; do
     [ -z "${hosts}" ] && continue
 
-    readarray -d, -t ips < <(printf "${hosts}")
+    readarray -d, -t ips < <(printf "${hosts//\"/}")
+    [ "${#ips[@]}" -eq 0 ] && continue
 
     for i in "${!ips[@]}"; do
         printf "Host %s-%02d\n" "${type}" "${i}"
@@ -49,5 +50,5 @@ while read type x hosts; do
         printf "  Hostname %s\n\n" "${ips[$i]}"
     done >> "${SSH_CONFIG}"
 
-    printf "%s %s\n" "${hosts}" "$(< ${SSH_HOST_PUBKEY})" >> "${SSH_KNOWN_HOSTS}"
+    printf "%s %s\n" "${hosts//\"/}" "$(< ${SSH_HOST_PUBKEY})" >> "${SSH_KNOWN_HOSTS}"
 done

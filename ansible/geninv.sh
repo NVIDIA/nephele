@@ -24,7 +24,8 @@ rm -f "${ANSIBLE_INVENTORY}"
 declare -A groups
 
 while read type x hosts; do
-    readarray -d, -t ips < <(printf "${hosts}")
+    readarray -d, -t ips < <(printf ${hosts//\"/})
+    [ "${#ips[@]}" -eq 0 ] && continue
 
     if [[ "${type}" == *-* ]]; then
         groups[${type%%-*}]+=" ${type#*-} "
