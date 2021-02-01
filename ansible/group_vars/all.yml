@@ -95,3 +95,14 @@ enroot_environ_config_files:
 nv_restrict_profiling_to_admin_users: 0
 perf_event_paranoid_level: '-1'
 kptr_restrict_level: '0'
+
+#nfs_idmapd_domain:
+nfs_exports:
+  - path: /nfs
+    mode: 777
+    options: "*(rw,sync,all_squash,anonuid={{ ansible_env.SUDO_UID }},anongid={{ ansible_env.SUDO_GID }})"
+nfs_mounts:
+  - mountpoint: /nfs
+    server: "{{ groups['nfs_server'][0] }}"
+    path: /nfs
+    options: async

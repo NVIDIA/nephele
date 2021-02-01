@@ -55,4 +55,12 @@ login
 
 [slurm_compute:children]
 compute
+
+### NFS ###
+
+[nfs_server:children]
+login
+
+[nfs_clients:children]
+compute
 EOF

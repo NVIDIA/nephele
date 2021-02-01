@@ -1,0 +1,10 @@
+---
+- hosts: nfs_server
+  become: yes
+  roles:
+    - { role: nfs, nfs_is_server: yes }
+
+- hosts: nfs_clients
+  become: yes
+  roles:
+    - { role: nfs, nfs_is_client: yes }
