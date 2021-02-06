@@ -42,9 +42,9 @@ while read type x hosts; do
     readarray -d, -t ips < <(printf "${hosts}")
 
     for i in "${!ips[@]}"; do
-        printf "Host %s-%02d\n" "${type}" "${i}"
+        printf "Host %s-%04d\n" "${type}" "${i}"
         if [ "${type}" != "login" ]; then
-            printf "  ProxyJump login-00\n"
+            printf "  ProxyJump login-0000\n"
         fi
         printf "  Hostname %s\n\n" "${ips[$i]}"
     done >> "${SSH_CONFIG}"
