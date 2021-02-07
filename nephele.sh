@@ -55,7 +55,7 @@ create() {
 
     pushd terraform
     echo "Creating ${CLOUD_PROVIDER} cluster..."
-    terraform apply -var replicas="${TF_VAR_replicas}" "${CLOUD_PROVIDER}"
+    terraform apply -parallelism=${TF_threads} -var replicas="${TF_VAR_replicas}" "${CLOUD_PROVIDER}"
 
     echo "Generating SSH configuration..."
     terraform output | ../ssh/genconf.sh
@@ -85,13 +85,13 @@ create() {
 }
 
 connect() {
-    exec ssh -F ssh/config login-00
+    exec ssh -F ssh/config login-0000
 }
 
 destroy() {
     pushd terraform
     echo "Destroying ${CLOUD_PROVIDER} cluster..."
-    terraform destroy "${CLOUD_PROVIDER}"
+    terraform destroy -parallelism=${TF_threads} "${CLOUD_PROVIDER}"
     popd
 
     echo "Done"

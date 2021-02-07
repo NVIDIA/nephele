@@ -31,7 +31,7 @@ while read type x hosts; do
     fi
     printf "[%s]\n" "${type#*-}"
     if [ ${#ips[@]} -gt 0 ]; then
-        printf "%s-[00:%02d]\n" "${type}" $((${#ips[@]} - 1))
+        printf "%s-[0000:%04d]\n" "${type}" $((${#ips[@]} - 1))
     fi
     printf "\n"
 done >> "${ANSIBLE_INVENTORY}"
