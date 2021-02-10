@@ -1,0 +1,14 @@
+---
+-
+  become: true
+  hosts: compute
+  tasks:
+    -
+      copy:
+        content: "ACTION==\"add\", SUBSYSTEM==\"infiniband\", PROGRAM=\"rdma_rename %k NAME_PCI\"\n"
+        dest: /etc/udev/rules.d/60-rdma-persistent-naming.rules
+      name: Add udev file for IB
+    -
+      service:
+        name: openibd
+        state: restarted
