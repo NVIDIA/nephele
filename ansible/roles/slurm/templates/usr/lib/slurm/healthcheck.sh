@@ -29,8 +29,8 @@ runparts() {
     done
 }
 
-logger -s -t slurm-healthcheck "START user=${SLURM_JOB_USER} job=${SLURM_JOB_ID}"
+logger -s -t slurm-healthcheck "START"
 runparts {{ _sysconf_dir }}/healthcheck.d 2> >(logger -e -s -t slurm-healthcheck)
-logger -s -t slurm-healthcheck "END user=${SLURM_JOB_USER} job=${SLURM_JOB_ID} after $(( $(date +%s) - start_time )) seconds"
+logger -s -t slurm-healthcheck "END after $(( $(date +%s) - start_time )) seconds"
 
 exit "${exit_code}"

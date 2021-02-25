@@ -14,6 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-logger -s -t slurm-unkillable "Unkillable tasks detected user=${SLURM_JOB_USER} job=${SLURM_JOB_ID}"
+logger -s -t slurm-unkillable "Unkillable tasks detected job=${SLURM_JOB_ID}"
 
 exit 0
