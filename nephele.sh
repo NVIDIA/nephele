@@ -86,7 +86,7 @@ create() {
 }
 
 connect() {
-    exec ssh -F ssh/config login-00
+    exec ssh -F ssh/config login-000
 }
 
 destroy() {
