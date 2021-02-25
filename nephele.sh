@@ -55,7 +55,7 @@ create() {
 
     pushd terraform
     echo "Creating ${CLOUD_PROVIDER} cluster..."
-    terraform apply -var replicas="${TF_VAR_replicas}" "${CLOUD_PROVIDER}"
+    terraform apply -parallelism="${PARALLELISM}" -var replicas="${TF_VAR_replicas}" "${CLOUD_PROVIDER}"
 
     echo "Generating SSH configuration..."
     terraform output | ../ssh/genconf.sh
@@ -71,15 +71,15 @@ create() {
     ansible all -m wait_for_connection
 
     echo "Uploading packages..."
-    ansible all --list-hosts | sed 1d | xargs -P0 -n1 -i scp -F ../ssh/config ../packages/*.deb {}:/var/tmp
+    ansible -f "${PARALLELISM}" all -m copy -a "src=../packages/ dest=/var/tmp/"
 
     echo "Provisioning instances..."
-    ansible-playbook playbooks/bootstrap.yml
-    ansible-playbook playbooks/nfs.yml
-    ansible-playbook playbooks/nvidia.yml
-    ansible-playbook playbooks/mellanox.yml
-    ansible-playbook playbooks/containers.yml
-    ansible-playbook playbooks/slurm.yml
+    ansible-playbook -f "${PARALLELISM}" playbooks/bootstrap.yml
+    ansible-playbook -f "${PARALLELISM}" playbooks/nfs.yml
+    ansible-playbook -f "${PARALLELISM}" playbooks/nvidia.yml
+    ansible-playbook -f "${PARALLELISM}" playbooks/mellanox.yml
+    ansible-playbook -f "${PARALLELISM}" playbooks/containers.yml
+    ansible-playbook -f "${PARALLELISM}" playbooks/slurm.yml
     popd
 
     echo "Done"
@@ -92,7 +92,7 @@ connect() {
 destroy() {
     pushd terraform
     echo "Destroying ${CLOUD_PROVIDER} cluster..."
-    terraform destroy "${CLOUD_PROVIDER}"
+    terraform destroy -parallelism="${PARALLELISM}" "${CLOUD_PROVIDER}"
     popd
 
     echo "Done"
