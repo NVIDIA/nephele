@@ -25,8 +25,8 @@ nvidia_driver_module_params: "options nvidia NVreg_EnablePCIERelaxedOrderingMode
 nvidia_fabric_manager_package_version: "460.32.03-1"
 
 nvidia_gdrcopy_deb_packages:
-  - "/var/tmp/gdrdrv-dkms_2.1-1_amd64.deb"
-  - "/var/tmp/gdrcopy_2.1-1_amd64.deb"
+  - "/var/tmp/gdrdrv-dkms_2.2-1_amd64.deb"
+  - "/var/tmp/gdrcopy_2.2-1_amd64.deb"
 
 mofed_package_version: "5.1-2.5.8.0"
 
