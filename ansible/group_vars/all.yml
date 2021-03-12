@@ -35,7 +35,7 @@ mellanox_gpudirect_deb_packages:
   - "/var/tmp/nvidia-peer-memory_1.1-0_all.deb"
 
 slurm_install_pyxis: yes
-slurm_package_version: "20.02.6.1+nvidia-1"
+slurm_package_version: "20.11.4.1+nvidia-1"
 slurm_pyxis_package_version: "0.9.1-1"
 slurm_control_deb_packages:
   - "/var/tmp/nvslurm-plugins_{{ slurm_package_version }}_amd64.deb"
@@ -44,7 +44,7 @@ slurm_compute_deb_packages:
   - "/var/tmp/nvslurm-plugins_{{ slurm_package_version }}_amd64.deb"
   - "/var/tmp/nvslurm-utils_{{ slurm_package_version }}_amd64.deb"
   - "/var/tmp/nvslurm-compute_{{ slurm_package_version }}_amd64.deb"
-  - "/var/tmp/libslurm35_{{ slurm_package_version }}_amd64.deb"
+  - "/var/tmp/libslurm36_{{ slurm_package_version }}_amd64.deb"
   - "/var/tmp/libpam-slurm-adopt_{{ slurm_package_version }}_amd64.deb"
 slurm_client_deb_packages:
   - "/var/tmp/nvslurm-plugins_{{ slurm_package_version }}_amd64.deb"
