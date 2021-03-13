@@ -18,11 +18,24 @@ set -eu
 
 source nephele.conf
 
-for cmd in enroot terraform ansible; do
+cmds=("enroot" "terraform" "ansible")
+
+case "${CLOUD_PROVIDER}" in
+azure)
+    cmds+=("az") ;;
+esac
+
+for cmd in "${cmds[@]}"; do
     command -v "${cmd}" > /dev/null || { echo "Could not find command: ${cmd}"; exit 1; } >&2
 done
 
 init() {
+    echo "Initializing cloud provider..."
+    case "${CLOUD_PROVIDER}" in
+    azure)
+        az login --service-principal --username "${ARM_CLIENT_ID}" --password "${ARM_CLIENT_SECRET}" --tenant "${ARM_TENANT_ID}" ;;
+    esac
+
     pushd ssh
     echo "Generating SSH keys..."
     ./genkeys.sh
@@ -56,12 +69,6 @@ create() {
     pushd terraform
     echo "Creating ${CLOUD_PROVIDER} cluster..."
     terraform apply -parallelism="${PARALLELISM}" -var replicas="${TF_VAR_replicas}" "${CLOUD_PROVIDER}"
-
-    echo "Generating SSH configuration..."
-    terraform output | ../ssh/genconf.sh
-
-    echo "Generating ansible configuration..."
-    terraform output | ../ansible/geninv.sh
     popd
 
     pushd ansible
@@ -86,7 +93,7 @@ create() {
 }
 
 connect() {
-    exec ssh -F ssh/config login-000
+    exec ssh -F ssh/config login-0000
 }
 
 destroy() {

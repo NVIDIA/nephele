@@ -12,44 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-resource "azurerm_public_ip" "default" {
-  name                = "${var.prefix}-${count.index}-pip"
-  count               = var.public ? var.replicas : 0
-  resource_group_name = var.region.name
-  location            = var.region.location
-  allocation_method   = "Dynamic"
-}
-
-resource "azurerm_network_interface" "default" {
-  name                      = "${var.prefix}-${count.index}-nic"
-  count                     = var.replicas
-  resource_group_name       = var.region.name
-  location                  = var.region.location
-
-  # Not supported on IB instances
-  #enable_accelerated_networking = true
-
-  ip_configuration {
-    name                          = "${var.prefix}-${count.index}-ip"
-    subnet_id                     = var.subnet.id
-    private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = var.public ? azurerm_public_ip.default[count.index].id : null
-  }
-}
-
-resource "azurerm_network_interface_security_group_association" "default" {
-  count                     = var.public ? var.replicas : 0
-  network_interface_id      = azurerm_network_interface.default[count.index].id
-  network_security_group_id = var.firewall.id
-}
-
-resource "azurerm_linux_virtual_machine" "default" {
-  name                         = "${var.prefix}-${count.index}"
+resource "azurerm_linux_virtual_machine_scale_set" "default" {
+  name                         = var.prefix
   resource_group_name          = var.region.name
   location                     = var.region.location
-  availability_set_id          = var.avail_zone != null ? var.avail_zone.id : null
-  size                         = var.type
-  count                        = var.replicas
+  sku                          = var.type
+  instances                    = var.replicas
   proximity_placement_group_id = var.group != null ? var.group.id : null
   priority                     = var.preemptible ? "Spot" : "Regular"
   eviction_policy              = var.preemptible ? "Delete" : null
@@ -58,7 +26,7 @@ resource "azurerm_linux_virtual_machine" "default" {
   #dedicated_host_id =
 
   # Required even though we rely on cloud config
-  admin_username             = var.ssh.user
+  admin_username = var.ssh.user
   admin_ssh_key {
     username   = var.ssh.user
     public_key = file(var.ssh.pubkey)
@@ -76,7 +44,6 @@ resource "azurerm_linux_virtual_machine" "default" {
   }
 
   os_disk {
-    name                 = "${var.prefix}-${count.index}-disk"
     storage_account_type = "Standard_LRS"
     caching              = "ReadOnly"
     disk_size_gb         = "2000"
@@ -87,7 +54,30 @@ resource "azurerm_linux_virtual_machine" "default" {
     #}
   }
 
-  network_interface_ids = [
-    azurerm_network_interface.default[count.index].id
-  ]
+  network_interface {
+    name                      = "${var.prefix}-nic"
+    network_security_group_id = var.firewall.id
+    primary                   = true
+
+    # Not supported on IB instances
+    #enable_accelerated_networking = true
+
+    ip_configuration {
+      name      = "${var.prefix}-ip"
+      subnet_id = var.subnet.id
+
+      dynamic "public_ip_address" {
+        for_each = var.public ? ["${var.prefix}-pip"] : []
+        content {
+          name = public_ip_address.value
+        }
+      }
+    }
+  }
+
+  lifecycle {
+    ignore_changes = [
+      network_interface[0].ip_configuration[0].primary
+    ]
+  }
 }

@@ -12,10 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+data "external" "public_ips" {
+  program = ["az", "vmss", "list-instance-public-ips", "-g", var.region.name, "--name", azurerm_linux_virtual_machine_scale_set.default.name, "--query", "{addrs: join(',', [].ipAddress)}"]
+}
+
+data "external" "private_ips" {
+  program = ["az", "vmss", "nic", "list", "-g", var.region.name, "--vmss-name", azurerm_linux_virtual_machine_scale_set.default.name, "--query", "{addrs: join(',', [].ipConfigurations[0].privateIpAddress)}"]
+}
+
 output "public_ips" {
-  value = azurerm_linux_virtual_machine.default.*.public_ip_address
+  value = data.external.public_ips.result.addrs
 }
 
 output "private_ips" {
-  value = azurerm_linux_virtual_machine.default.*.private_ip_address
+  value = data.external.private_ips.result.addrs
 }

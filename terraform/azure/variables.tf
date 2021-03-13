@@ -31,12 +31,23 @@ variable "preemptible" {
 }
 
 variable "ssh" {
-  description = "SSH configuration for login"
+  description = "SSH configuration"
   type        = object({
     user         = string
+    privkey      = string
     pubkey       = string
     privkey_host = string
     pubkey_host  = string
+    known_hosts  = string
+    config       = string
+  })
+  default     = null
+}
+
+variable "ansible" {
+  description = "Ansible configuration"
+  type        = object({
+    inventory = string
   })
   default     = null
 }

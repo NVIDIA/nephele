@@ -18,13 +18,6 @@ resource "azurerm_proximity_placement_group" "default" {
   resource_group_name = azurerm_resource_group.default.name
 }
 
-resource "azurerm_availability_set" "default" {
-  name                         = "${local.cluster_id}-az"
-  location                     = azurerm_resource_group.default.location
-  resource_group_name          = azurerm_resource_group.default.name
-  proximity_placement_group_id = azurerm_proximity_placement_group.default.id
-}
-
 module "instances_login" {
   source = "./instance"
 
@@ -40,7 +33,6 @@ module "instances_login" {
   region      = azurerm_resource_group.default
   group       = null
   subnet      = azurerm_subnet.default
-  avail_zone  = null
   firewall    = azurerm_network_security_group.default
 }
 
@@ -59,7 +51,6 @@ module "instances_x4v100" {
   region      = azurerm_resource_group.default
   group       = azurerm_proximity_placement_group.default
   subnet      = azurerm_subnet.default
-  avail_zone  = azurerm_availability_set.default
   firewall    = azurerm_network_security_group.default
 }
 
@@ -78,6 +69,5 @@ module "instances_x8a100" {
   region      = azurerm_resource_group.default
   group       = azurerm_proximity_placement_group.default
   subnet      = azurerm_subnet.default
-  avail_zone  = azurerm_availability_set.default
   firewall    = azurerm_network_security_group.default
 }
