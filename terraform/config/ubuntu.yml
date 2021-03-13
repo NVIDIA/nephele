@@ -30,6 +30,19 @@ user:
   lock_passwd: true
   sudo: ALL=(ALL) NOPASSWD:ALL
 
+network:
+  config: disabled
+
+write_files:
+  - path: /etc/netplan/50-cloud-init.yaml
+    permissions: '0644'
+    content: |
+      network:
+        version: 2
+        ethernets:
+          eth0:
+            dhcp4: true
+
 apt:
   conf: |
     APT::Install-Recommends "0";
