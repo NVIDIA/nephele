@@ -58,6 +58,9 @@ runcmd:
   - sed -i 's/#MaxSessions.*/MaxSessions 50/' /etc/ssh/sshd_config
   - sed -i 's/#MaxStartups.*/MaxStartups 50:30:80/' /etc/ssh/sshd_config
   - systemctl reload sshd
+  - cd /var/tmp && curl -fSsL -O https://github.com/longlimsft/shared-binary/raw/master/linux-headers-5.4.73-revert-pci_5.4.73-revert-pci-1_amd64.deb
+  - cd /var/tmp && curl -fSsL -O https://github.com/longlimsft/shared-binary/raw/master/linux-image-5.4.73-revert-pci_5.4.73-revert-pci-1_amd64.deb
+  - systemd-run --property="After=apt-daily.service apt-daily-upgrade.service" --wait sh -c 'apt-get install -y /var/tmp/*.deb'
 
 power_state:
   delay: "now"
