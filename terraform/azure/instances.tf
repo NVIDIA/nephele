@@ -28,8 +28,8 @@ module "instances_login" {
   preemptible = false
 
   ssh         = var.ssh
-  vmi         = data.azurerm_platform_image.ubuntu_2004
-  config      = data.template_cloudinit_config.ubuntu_2004.rendered
+  vmi         = data.azurerm_platform_image.ubuntu_1804
+  config      = data.template_cloudinit_config.ubuntu_1804.rendered
   region      = azurerm_resource_group.default
   group       = null
   subnet      = azurerm_subnet.default
@@ -46,8 +46,8 @@ module "instances_x4v100" {
   preemptible = var.preemptible
 
   ssh         = var.ssh
-  vmi         = data.azurerm_platform_image.ubuntu_2004
-  config      = data.template_cloudinit_config.ubuntu_2004.rendered
+  vmi         = data.azurerm_platform_image.ubuntu_1804
+  config      = data.template_cloudinit_config.ubuntu_1804.rendered
   region      = azurerm_resource_group.default
   group       = azurerm_proximity_placement_group.default
   subnet      = azurerm_subnet.default
@@ -64,8 +64,8 @@ module "instances_x8a100" {
   preemptible = var.preemptible
 
   ssh         = var.ssh
-  vmi         = data.azurerm_platform_image.ubuntu_2004
-  config      = data.template_cloudinit_config.ubuntu_2004.rendered
+  vmi         = data.azurerm_platform_image.ubuntu_1804
+  config      = data.template_cloudinit_config.ubuntu_1804.rendered
   region      = azurerm_resource_group.default
   group       = azurerm_proximity_placement_group.default
   subnet      = azurerm_subnet.default

@@ -1,4 +1,4 @@
 [submodule "packages"]
     path = packages
     url = https://github.com/nvidia/nephele-packages
-    branch = ubuntu-20.04
+    branch = ubuntu-18.04

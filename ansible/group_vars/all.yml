@@ -46,9 +46,11 @@ slurm_compute_deb_packages:
   - "/nfs/packages/nvslurm-compute_{{ slurm_package_version }}_amd64.deb"
   - "/nfs/packages/libslurm36_{{ slurm_package_version }}_amd64.deb"
   - "/nfs/packages/libpam-slurm-adopt_{{ slurm_package_version }}_amd64.deb"
+  - "/nfs/packages/libpmix2_3.1.2-3_amd64.deb"
 slurm_client_deb_packages:
   - "/nfs/packages/nvslurm-plugins_{{ slurm_package_version }}_amd64.deb"
   - "/nfs/packages/nvslurm-utils_{{ slurm_package_version }}_amd64.deb"
+  - "/nfs/packages/libpmix2_3.1.2-3_amd64.deb"
 slurm_pyxis_deb_packages:
   - "/nfs/packages/nvslurm-plugin-pyxis_{{ slurm_pyxis_package_version }}_amd64.deb"
 
@@ -81,7 +83,6 @@ enroot_config: |
   ENROOT_MOUNT_HOME=yes
   ENROOT_RESTRICT_DEV=yes
   ENROOT_ROOTFS_WRITABLE=yes
-  ENROOT_ZSTD_OPTIONS=--fast
 
 #enroot_hook_config_files:
 #enroot_mount_config_files:

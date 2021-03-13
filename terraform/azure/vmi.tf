@@ -33,3 +33,25 @@ data "template_cloudinit_config" "ubuntu_2004" {
     })
   }
 }
+
+data "azurerm_platform_image" "ubuntu_1804" {
+  location  = azurerm_resource_group.default.location
+  publisher = "Canonical"
+  offer     = "UbuntuServer"
+  sku       = "18_04-lts-gen2"
+}
+
+data "template_cloudinit_config" "ubuntu_1804" {
+  gzip          = true
+  base64_encode = true
+
+  part {
+    content_type = "text/cloud-config"
+    content      = templatefile("${path.root}/../config/ubuntu.yml", {
+      ssh_user         = var.ssh.user
+      ssh_pubkey       = jsonencode(file(var.ssh.pubkey))
+      ssh_privkey_host = jsonencode(file(var.ssh.privkey_host))
+      ssh_pubkey_host  = jsonencode(file(var.ssh.pubkey_host))
+    })
+  }
+}
