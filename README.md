@@ -21,6 +21,11 @@ apt install python3-pip
 pip3 install --upgrade ansible
 ```
 
+### Install provider CLI
+#### Azure
+https://docs.microsoft.com/en-us/cli/azure/install-azure-cli
+
+
 ## Setup
 
 ### Edit cluster configuration
@@ -30,20 +35,20 @@ vi nephele.conf
 
 ### One time setup
 ```bash
-./nephele.sh init
+./nephele init
 ```
 
 ### Create the cluster
 ```bash
-./nephele.sh create
+./nephele create
 ```
 
 ### Connect to the cluster
 ```bash
-./nephele.sh connect
+./nephele connect
 ```
 
 ### Destroy the cluster
 ```bash
-./nephele.sh destroy
+./nephele destroy
 ```
