@@ -77,12 +77,14 @@ create() {
     sleep 10 # wait for the reboot
     ansible all -m wait_for_connection
 
-    echo "Uploading packages..."
-    ansible -f "${PARALLELISM}" all -m copy -a "src=../packages/ dest=/var/tmp/"
-
-    echo "Provisioning instances..."
+    echo "Bootstrapping instances..."
     ansible-playbook -f "${PARALLELISM}" playbooks/bootstrap.yml
     ansible-playbook -f "${PARALLELISM}" playbooks/nfs.yml
+
+    echo "Uploading packages..."
+    ansible -f "${PARALLELISM}" 'nfs_server[0]' -m synchronize -a "use_ssh_args=yes src=../packages/ dest=/nfs/packages/ rsync_opts=--include=*.deb,--exclude=*"
+
+    echo "Provisioning instances..."
     ansible-playbook -f "${PARALLELISM}" playbooks/nvidia.yml
     ansible-playbook -f "${PARALLELISM}" playbooks/mellanox.yml
     ansible-playbook -f "${PARALLELISM}" playbooks/containers.yml

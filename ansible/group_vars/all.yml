@@ -25,32 +25,32 @@ nvidia_driver_module_params: "options nvidia NVreg_EnablePCIERelaxedOrderingMode
 nvidia_fabric_manager_package_version: "460.32.03-1"
 
 nvidia_gdrcopy_deb_packages:
-  - "/var/tmp/gdrdrv-dkms_2.2-1_amd64.deb"
-  - "/var/tmp/gdrcopy_2.2-1_amd64.deb"
+  - "/nfs/packages/gdrdrv-dkms_2.2-1_amd64.deb"
+  - "/nfs/packages/gdrcopy_2.2-1_amd64.deb"
 
 mofed_package_version: "5.1-2.5.8.0"
 
 mellanox_gpudirect_deb_packages:
-  - "/var/tmp/nvidia-peer-memory-dkms_1.1-0_all.deb"
-  - "/var/tmp/nvidia-peer-memory_1.1-0_all.deb"
+  - "/nfs/packages/nvidia-peer-memory-dkms_1.1-0_all.deb"
+  - "/nfs/packages/nvidia-peer-memory_1.1-0_all.deb"
 
 slurm_install_pyxis: yes
 slurm_package_version: "20.11.4.1+nvidia-1"
 slurm_pyxis_package_version: "0.9.1-1"
 slurm_control_deb_packages:
-  - "/var/tmp/nvslurm-plugins_{{ slurm_package_version }}_amd64.deb"
-  - "/var/tmp/nvslurm-control_{{ slurm_package_version }}_amd64.deb"
+  - "/nfs/packages/nvslurm-plugins_{{ slurm_package_version }}_amd64.deb"
+  - "/nfs/packages/nvslurm-control_{{ slurm_package_version }}_amd64.deb"
 slurm_compute_deb_packages:
-  - "/var/tmp/nvslurm-plugins_{{ slurm_package_version }}_amd64.deb"
-  - "/var/tmp/nvslurm-utils_{{ slurm_package_version }}_amd64.deb"
-  - "/var/tmp/nvslurm-compute_{{ slurm_package_version }}_amd64.deb"
-  - "/var/tmp/libslurm36_{{ slurm_package_version }}_amd64.deb"
-  - "/var/tmp/libpam-slurm-adopt_{{ slurm_package_version }}_amd64.deb"
+  - "/nfs/packages/nvslurm-plugins_{{ slurm_package_version }}_amd64.deb"
+  - "/nfs/packages/nvslurm-utils_{{ slurm_package_version }}_amd64.deb"
+  - "/nfs/packages/nvslurm-compute_{{ slurm_package_version }}_amd64.deb"
+  - "/nfs/packages/libslurm36_{{ slurm_package_version }}_amd64.deb"
+  - "/nfs/packages/libpam-slurm-adopt_{{ slurm_package_version }}_amd64.deb"
 slurm_client_deb_packages:
-  - "/var/tmp/nvslurm-plugins_{{ slurm_package_version }}_amd64.deb"
-  - "/var/tmp/nvslurm-utils_{{ slurm_package_version }}_amd64.deb"
+  - "/nfs/packages/nvslurm-plugins_{{ slurm_package_version }}_amd64.deb"
+  - "/nfs/packages/nvslurm-utils_{{ slurm_package_version }}_amd64.deb"
 slurm_pyxis_deb_packages:
-  - "/var/tmp/nvslurm-plugin-pyxis_{{ slurm_pyxis_package_version }}_amd64.deb"
+  - "/nfs/packages/nvslurm-plugin-pyxis_{{ slurm_pyxis_package_version }}_amd64.deb"
 
 #slurm_cluster_name:
 #slurm_munge_key:
