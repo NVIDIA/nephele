@@ -23,16 +23,16 @@
 
 ssh = {
   user         = "nvidia"
-  privkey      = "../ssh/id_rsa"
-  pubkey       = "../ssh/id_rsa.pub"
-  privkey_host = "../ssh/host_ed25519"
-  pubkey_host  = "../ssh/host_ed25519.pub"
-  known_hosts  = "../ssh/known_hosts"
-  config       = "../ssh/config"
+  privkey      = "../../ssh/id_rsa"
+  pubkey       = "../../ssh/id_rsa.pub"
+  privkey_host = "../../ssh/host_ed25519"
+  pubkey_host  = "../../ssh/host_ed25519.pub"
+  known_hosts  = "../../ssh/known_hosts"
+  config       = "../../ssh/config"
 }
 
 ansible = {
-  inventory      = "../ansible/inventory"
+  inventory      = "../../ansible/inventory"
 }
 
 replicas = {

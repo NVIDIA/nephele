@@ -43,7 +43,7 @@ init() {
 
     pushd terraform
     echo "Initializing terraform..."
-    terraform init "${CLOUD_PROVIDER}"
+    terraform -chdir="${CLOUD_PROVIDER}" init
     popd
 
     pushd ansible
@@ -68,7 +68,7 @@ create() {
 
     pushd terraform
     echo "Creating ${CLOUD_PROVIDER} cluster..."
-    terraform apply -parallelism="${PARALLELISM}" -var replicas="${TF_VAR_replicas}" "${CLOUD_PROVIDER}"
+    terraform -chdir="${CLOUD_PROVIDER}" apply -parallelism="${PARALLELISM}" -var-file "../terraform.tfvars" -var replicas="${TF_VAR_replicas}"
     popd
 
     pushd ansible
@@ -101,7 +101,7 @@ connect() {
 destroy() {
     pushd terraform
     echo "Destroying ${CLOUD_PROVIDER} cluster..."
-    terraform destroy -parallelism="${PARALLELISM}" "${CLOUD_PROVIDER}"
+    terraform -chdir="${CLOUD_PROVIDER}" destroy -parallelism="${PARALLELISM}" -var-file "../terraform.tfvars"
     popd
 
     echo "Done"
