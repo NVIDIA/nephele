@@ -68,6 +68,7 @@
       - name: install fabric manager
         include_role:
           name: nvidia-fabric-manager
+        when: ansible_local.nvlinks.count
 
       - name: install gdrcopy
         include_role:

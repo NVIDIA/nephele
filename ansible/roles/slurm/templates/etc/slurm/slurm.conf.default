@@ -95,7 +95,9 @@ RebootProgram=/sbin/reboot
 # PARTITIONS
 PartitionName=DEFAULT State=UP MaxTime=INFINITE DefaultTime=INFINITE PriorityTier=1 OverSubscribe=EXCLUSIVE DefMemPerNode=0 GraceTime=0
 {% for part in slurm_partitions | intersect(groups) %}
+{% if groups[part] | length -%}
 PartitionName={{ part }} Nodes={{ groups[part] | join(',') }}
+{% endif -%}
 {% endfor %}
 
 # NODES
