@@ -8,6 +8,11 @@ login-[0000:${format("%04d", length(split(",", login)) - 1)}]
 x4v100-[0000:${format("%04d", length(split(",", x4v100)) - 1)}]
 %{ endif ~}
 
+[x8v100]
+%{ if try(x8v100, "") != "" ~}
+x8v100-[0000:${format("%04d", length(split(",", x8v100)) - 1)}]
+%{ endif ~}
+
 [x8a100]
 %{ if try(x8a100, "") != "" ~}
 x8a100-[0000:${format("%04d", length(split(",", x8a100)) - 1)}]
@@ -15,6 +20,7 @@ x8a100-[0000:${format("%04d", length(split(",", x8a100)) - 1)}]
 
 [compute:children]
 x4v100
+x8v100
 x8a100
 
 ### SLURM ###

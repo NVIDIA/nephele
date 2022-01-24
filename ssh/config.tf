@@ -21,6 +21,14 @@ Host x4v100-${format("%04d", i)}
 %{ endfor ~}
 %{~ endif ~}
 
+%{ if try(x8v100, "") != "" ~}
+%{~ for i, ip in split(",", x8v100) ~}
+Host x8v100-${format("%04d", i)}
+  ProxyJump login-0000
+  Hostname ${ip}
+%{ endfor ~}
+%{~ endif ~}
+
 %{ if try(x8a100, "") != "" ~}
 %{~ for i, ip in split(",", x8a100) ~}
 Host x8a100-${format("%04d", i)}

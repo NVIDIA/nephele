@@ -6,6 +6,10 @@ ${login} ${file(pubkey_host)}
 ${x4v100} ${file(pubkey_host)}
 %{~ endif ~}
 
+%{~ if try(x8v100, "") != "" ~}
+${x8v100} ${file(pubkey_host)}
+%{~ endif ~}
+
 %{~ if try(x8a100, "") != "" ~}
 ${x8a100} ${file(pubkey_host)}
 %{~ endif ~}

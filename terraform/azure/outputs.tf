@@ -29,6 +29,7 @@ resource "local_file" "ansible_inventory" {
   content  = templatefile("${var.ansible.inventory}.tf", {
     login  = module.instances_login.public_ips,
     x4v100 = module.instances_x4v100.private_ips,
+    x8v100 = ""
     x8a100 = module.instances_x8a100.private_ips,
   })
 }
@@ -39,6 +40,7 @@ resource "local_file" "ssh_known_hosts" {
     pubkey_host = var.ssh.pubkey_host,
     login       = module.instances_login.public_ips,
     x4v100      = module.instances_x4v100.private_ips,
+    x8v100      = ""
     x8a100      = module.instances_x8a100.private_ips,
   })
 }
@@ -51,6 +53,7 @@ resource "local_file" "ssh_config" {
     known_hosts = var.ssh.known_hosts,
     login       = module.instances_login.public_ips,
     x4v100      = module.instances_x4v100.private_ips,
+    x8v100      = ""
     x8a100      = module.instances_x8a100.private_ips,
   })
 }
