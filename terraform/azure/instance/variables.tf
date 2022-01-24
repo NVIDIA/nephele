@@ -12,11 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-variable "prefix" {}
-variable "region" {}
+variable "name" {}
+variable "group" {}
 variable "type" {}
 variable "replicas" {}
-variable "group" {}
+variable "zone" {}
+variable "placement" {}
 variable "preemptible" {}
 variable "ssh" {}
 variable "vmi" {}

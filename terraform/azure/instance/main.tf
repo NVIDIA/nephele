@@ -13,14 +13,17 @@
 # limitations under the License.
 
 resource "azurerm_linux_virtual_machine_scale_set" "default" {
-  name                         = var.prefix
-  resource_group_name          = var.region.name
-  location                     = var.region.location
+  count                        = var.replicas > 0 ? 1 : 0
+  name                         = var.name
+  resource_group_name          = var.group.name
+  location                     = var.group.location
   sku                          = var.type
   instances                    = var.replicas
-  proximity_placement_group_id = var.group != null ? var.group.id : null
+  zones                        = var.zone != null ? [tonumber(var.zone)] : []
+  proximity_placement_group_id = var.placement != null ? var.placement.id : null
   priority                     = var.preemptible ? "Spot" : "Regular"
   eviction_policy              = var.preemptible ? "Delete" : null
+  overprovision                = false
 
   # Not supported on GPU instances
   #dedicated_host_id =
@@ -55,7 +58,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "default" {
   }
 
   network_interface {
-    name                      = "${var.prefix}-nic"
+    name                      = "${var.name}-nic"
     network_security_group_id = var.firewall.id
     primary                   = true
 
@@ -63,11 +66,11 @@ resource "azurerm_linux_virtual_machine_scale_set" "default" {
     #enable_accelerated_networking = true
 
     ip_configuration {
-      name      = "${var.prefix}-ip"
+      name      = "${var.name}-ip"
       subnet_id = var.subnet.id
 
       dynamic "public_ip_address" {
-        for_each = var.public ? ["${var.prefix}-pip"] : []
+        for_each = var.public ? ["${var.name}-pip"] : []
         content {
           name = public_ip_address.value
         }

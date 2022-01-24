@@ -13,13 +13,16 @@
 # limitations under the License.
 
 # Azure
-#region = "West US 2"
+#region  = "West US 2"
+#zone    = 1
 
 # GCP
-#region  = "us-west1-a"
+#region  = "us-west1"
+#zone    = "us-west1-a"
 
 # AWS
 #region  = "us-west-2"
+#zone    = "us-west-2a"
 
 ssh = {
   user         = "nvidia"

@@ -12,18 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# WAR: https://github.com/hashicorp/terraform-provider-azurerm/issues/7333
 data "external" "public_ips" {
-  program = ["az", "vmss", "list-instance-public-ips", "-g", var.region.name, "--name", azurerm_linux_virtual_machine_scale_set.default.name, "--query", "{addrs: join(',', [].ipAddress)}"]
+  count = var.replicas > 0 ? 1 : 0
+
+  program = ["az", "vmss", "list-instance-public-ips", "-g", var.group.name, "--name", azurerm_linux_virtual_machine_scale_set.default[0].name, "--query", "{addrs: join(',', [].ipAddress)}"]
 }
 
+# WAR: https://github.com/hashicorp/terraform-provider-azurerm/issues/7333
 data "external" "private_ips" {
-  program = ["az", "vmss", "nic", "list", "-g", var.region.name, "--vmss-name", azurerm_linux_virtual_machine_scale_set.default.name, "--query", "{addrs: join(',', [].ipConfigurations[0].privateIpAddress)}"]
+  count = var.replicas > 0 ? 1 : 0
+
+  program = ["az", "vmss", "nic", "list", "-g", var.group.name, "--vmss-name", azurerm_linux_virtual_machine_scale_set.default[0].name, "--query", "{addrs: join(',', [].ipConfigurations[0].privateIpAddress)}"]
 }
 
 output "public_ips" {
-  value = data.external.public_ips.result.addrs
+  value = var.replicas > 0 ? data.external.public_ips[0].result.addrs : ""
 }
 
 output "private_ips" {
-  value = data.external.private_ips.result.addrs
+  value = var.replicas > 0 ? data.external.private_ips[0].result.addrs : ""
 }

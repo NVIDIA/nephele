@@ -21,7 +21,7 @@ resource "azurerm_proximity_placement_group" "default" {
 module "instances_login" {
   source = "./instance"
 
-  prefix      = "${local.cluster_id}-login"
+  name        = "${local.cluster_id}-login"
   type        = "Standard_D16s_v3"
   replicas    = 1
   public      = true
@@ -30,8 +30,9 @@ module "instances_login" {
   ssh         = var.ssh
   vmi         = data.azurerm_platform_image.ubuntu_2004
   config      = data.template_cloudinit_config.ubuntu_2004.rendered
-  region      = azurerm_resource_group.default
-  group       = null
+  group       = azurerm_resource_group.default
+  placement   = null
+  zone        = var.zone
   subnet      = azurerm_subnet.default
   firewall    = azurerm_network_security_group.default
 }
@@ -39,7 +40,7 @@ module "instances_login" {
 module "instances_x4v100" {
   source = "./instance"
 
-  prefix      = "${local.cluster_id}-x4v100"
+  name        = "${local.cluster_id}-x4v100"
   type        = "Standard_NC24rs_v3"
   replicas    = var.replicas.x4v100
   public      = false
@@ -48,8 +49,9 @@ module "instances_x4v100" {
   ssh         = var.ssh
   vmi         = data.azurerm_platform_image.ubuntu_2004
   config      = data.template_cloudinit_config.ubuntu_2004.rendered
-  region      = azurerm_resource_group.default
-  group       = azurerm_proximity_placement_group.default
+  group       = azurerm_resource_group.default
+  placement   = azurerm_proximity_placement_group.default
+  zone        = var.zone
   subnet      = azurerm_subnet.default
   firewall    = azurerm_network_security_group.default
 }
@@ -57,7 +59,7 @@ module "instances_x4v100" {
 module "instances_x8a100" {
   source = "./instance"
 
-  prefix      = "${local.cluster_id}-x8a100"
+  name        = "${local.cluster_id}-x8a100"
   type        = "Standard_ND96asr_v4"
   replicas    = var.replicas.x8a100
   public      = false
@@ -66,8 +68,9 @@ module "instances_x8a100" {
   ssh         = var.ssh
   vmi         = data.azurerm_platform_image.ubuntu_2004
   config      = data.template_cloudinit_config.ubuntu_2004.rendered
-  region      = azurerm_resource_group.default
-  group       = azurerm_proximity_placement_group.default
+  group       = azurerm_resource_group.default
+  placement   = azurerm_proximity_placement_group.default
+  zone        = var.zone
   subnet      = azurerm_subnet.default
   firewall    = azurerm_network_security_group.default
 }

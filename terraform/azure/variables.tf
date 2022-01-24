@@ -18,10 +18,16 @@ variable "region" {
   default     = null
 }
 
-variable "subnet" {
+variable "zone" {
+  description = "Availability zone for the cluster"
+  type        = string
+  default     = null
+}
+
+variable "vpc_cidr" {
   description = "Address prefix to use for the VPC"
   type        = string
-  default     = "10.0.0.0/24"
+  default     = "10.0.0.0/16"
 }
 
 variable "preemptible" {
