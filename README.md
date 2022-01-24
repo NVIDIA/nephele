@@ -4,14 +4,14 @@
 
 ### Install enroot
 ```bash
-curl -fSsL -O https://github.com/NVIDIA/enroot/releases/download/v3.2.0/enroot_3.2.0-1_amd64.deb
-curl -fSsL -O https://github.com/NVIDIA/enroot/releases/download/v3.2.0/enroot+caps_3.2.0-1_amd64.deb
+curl -fSsL -O https://github.com/NVIDIA/enroot/releases/download/v3.4.0/enroot_3.4.0-1_amd64.deb
+curl -fSsL -O https://github.com/NVIDIA/enroot/releases/download/v3.4.0/enroot+caps_3.4.0-1_amd64.deb
 apt install -y ./*.deb
 ```
 
 ### Install terraform
 ```bash
-curl -fSsL https://releases.hashicorp.com/terraform/0.14.5/terraform_0.14.5_linux_amd64.zip | zcat > /usr/local/bin/terraform
+curl -fSsL https://releases.hashicorp.com/terraform/1.1.4/terraform_1.1.4_windows_amd64.zip | zcat > /usr/local/bin/terraform
 chmod +x /usr/local/bin/terraform
 ```
 
