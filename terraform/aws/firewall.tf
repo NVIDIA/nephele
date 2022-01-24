@@ -34,12 +34,28 @@ resource "aws_security_group" "default" {
     cidr_blocks = [aws_vpc.default.cidr_block]
   }
 
+  ingress {
+    description = "Allow inbound EFA traffic"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    self        = true
+  }
+
   egress {
     description = "Allow outbound traffic"
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    description = "Allow outbound EFA traffic"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    self        = true
   }
 
   tags = {

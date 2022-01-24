@@ -80,7 +80,7 @@
           create: yes
           block: |
             nvidia-peermem
-        when: ansible_local.hcas.count
+        when: ansible_local.hcas.count or ansible_local.efas.count
 
       - name: reload kernel modules
         service:

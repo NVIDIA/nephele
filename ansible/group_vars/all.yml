@@ -29,6 +29,7 @@ nvidia_gdrcopy_deb_packages:
   - "/nfs/packages/libgdrapi_{{ nvidia_gdrcopy_package_version }}_amd64.deb"
 
 mofed_package_version: "5.4-1.0.3.0"
+efa_installer_version: "1.14.1"
 
 slurm_package_version: "21.08.5.1+nvidia-1"
 slurm_abi_version: "37"
@@ -82,13 +83,17 @@ enroot_config: |
   ENROOT_ZSTD_OPTIONS=--fast
 
 #enroot_hook_config_files:
-#enroot_mount_config_files:
+enroot_mount_config_files:
+  - filename: 50-efa-devices.fstab
+    content: |
+      /dev/infiniband
+
 enroot_environ_config_files:
   - filename: 50-visible-devices.env
     content: |
       NVIDIA_VISIBLE_DEVICES=all
       NVIDIA_DRIVER_CAPABILITIES=all
-      MELLANOX_VISIBLE_DEVICES=all
+#      MELLANOX_VISIBLE_DEVICES=all
 
 nv_restrict_profiling_to_admin_users: 0
 perf_event_paranoid_level: '-1'

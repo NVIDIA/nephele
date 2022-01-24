@@ -13,16 +13,27 @@
 # limitations under the License.
 
 ---
-- hosts: all
-  become: true
-  tasks:
-    - name: install custom facts module
-      include_role:
-        name: facts
+- name: install packages
+  apt:
+    name:
+      - libc6-dev # XXX DKMS will fail without this
+    state: present
+    update_cache: yes
 
-    - block:
-      - name: install mofed
-        include_role:
-          name: mofed
+- name: download efa installer
+  unarchive:
+    src: "https://efa-installer.amazonaws.com/aws-efa-installer-{{ efa_installer_version }}.tar.gz"
+    dest: /var/tmp
+    remote_src: yes
 
-      when: ansible_local.hcas.count
+- name: install efa
+  command:
+    chdir: /var/tmp/aws-efa-installer
+    cmd: ./efa_installer.sh -y
+
+- name: disable ptrace protection
+  sysctl:
+    name: kernel.yama.ptrace_scope
+    value: "0"
+    sysctl_file: /etc/sysctl.d/50-ansible-role-efa.conf
+    sysctl_set: yes
