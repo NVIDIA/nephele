@@ -73,4 +73,17 @@
         include_role:
           name: nvidia-gdrcopy
 
+      - name: register nvidia peermem
+        blockinfile:
+          path: /etc/modules-load.d/nvidia-peermem.conf
+          create: yes
+          block: |
+            nvidia-peermem
+        when: ansible_local.hcas.count
+
+      - name: reload kernel modules
+        service:
+          name: systemd-modules-load
+          state: restarted
+
       when: ansible_local.gpus.count

@@ -19,24 +19,21 @@
 
 nvidia_driver_ubuntu_install_from_cuda_repo: yes
 nvidia_driver_skip_reboot: yes
-nvidia_driver_package_version: "460.32.03-1"
 nvidia_driver_module_params: "options nvidia NVreg_EnablePCIERelaxedOrderingMode=1 NVreg_RegistryDwords=\"RmEnableNvlinkReservedTpCounters=1\" nv_cap_enable_devfs=0"
+nvidia_driver_package_version: "470.82.01-1"
+nvidia_fabric_manager_package_version: "470.82.01-1"
 
-nvidia_fabric_manager_package_version: "460.32.03-1"
-
+nvidia_gdrcopy_package_version: "2.3-1"
 nvidia_gdrcopy_deb_packages:
-  - "/nfs/packages/gdrdrv-dkms_2.2-1_amd64.deb"
-  - "/nfs/packages/gdrcopy_2.2-1_amd64.deb"
+  - "/nfs/packages/gdrdrv-dkms_{{ nvidia_gdrcopy_package_version }}_amd64.deb"
+  - "/nfs/packages/libgdrapi_{{ nvidia_gdrcopy_package_version }}_amd64.deb"
 
-mofed_package_version: "5.1-2.5.8.0"
+mofed_package_version: "5.4-1.0.3.0"
 
-mellanox_gpudirect_deb_packages:
-  - "/nfs/packages/nvidia-peer-memory-dkms_1.1-0_all.deb"
-  - "/nfs/packages/nvidia-peer-memory_1.1-0_all.deb"
-
+slurm_package_version: "21.08.5.1+nvidia-1"
+slurm_abi_version: "37"
+slurm_pyxis_package_version: "0.11.1-1"
 slurm_install_pyxis: yes
-slurm_package_version: "20.11.4.1+nvidia-1"
-slurm_pyxis_package_version: "0.9.1-1"
 slurm_control_deb_packages:
   - "/nfs/packages/nvslurm-plugins_{{ slurm_package_version }}_amd64.deb"
   - "/nfs/packages/nvslurm-control_{{ slurm_package_version }}_amd64.deb"
@@ -44,7 +41,7 @@ slurm_compute_deb_packages:
   - "/nfs/packages/nvslurm-plugins_{{ slurm_package_version }}_amd64.deb"
   - "/nfs/packages/nvslurm-utils_{{ slurm_package_version }}_amd64.deb"
   - "/nfs/packages/nvslurm-compute_{{ slurm_package_version }}_amd64.deb"
-  - "/nfs/packages/libslurm36_{{ slurm_package_version }}_amd64.deb"
+  - "/nfs/packages/libslurm{{ slurm_abi_version }}_{{ slurm_package_version }}_amd64.deb"
   - "/nfs/packages/libpam-slurm-adopt_{{ slurm_package_version }}_amd64.deb"
 slurm_client_deb_packages:
   - "/nfs/packages/nvslurm-plugins_{{ slurm_package_version }}_amd64.deb"
@@ -73,6 +70,7 @@ bootstrap_dirs:
     mode: 770
     group: "{{ ansible_env.SUDO_GID }}"
 
+enroot_version: "3.4.0"
 enroot_config: |
   ENROOT_CACHE_PATH=/var/cache/enroot
   ENROOT_RUNTIME_PATH=/run/user/$EUID/enroot/run

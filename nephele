@@ -85,8 +85,8 @@ create() {
     ansible -f "${PARALLELISM}" 'nfs_server[0]' -m synchronize -a "use_ssh_args=yes src=../packages/ dest=/nfs/packages/ rsync_opts=--include=*.deb,--exclude=*"
 
     echo "Provisioning instances..."
-    ansible-playbook -f "${PARALLELISM}" playbooks/nvidia.yml
     ansible-playbook -f "${PARALLELISM}" playbooks/mellanox.yml
+    ansible-playbook -f "${PARALLELISM}" playbooks/nvidia.yml
     ansible-playbook -f "${PARALLELISM}" playbooks/containers.yml
     ansible-playbook -f "${PARALLELISM}" playbooks/slurm.yml
     popd

@@ -48,7 +48,7 @@ EnforcePartLimits=ANY
 KillOnBadExit=1
 ProctrackType=proctrack/cgroup
 TaskPlugin=task/affinity,task/cgroup
-TaskPluginParam=Sched,None,Autobind=None
+TaskPluginParam=None,Autobind=None
 PropagateResourceLimitsExcept=MEMLOCK,NOFILE,CORE
 PrologFlags=Alloc,Serial,Contain
 Prolog={{ _lib_dir }}/prolog.sh

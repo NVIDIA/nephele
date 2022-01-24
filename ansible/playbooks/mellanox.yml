@@ -25,8 +25,4 @@
         include_role:
           name: mofed
 
-      - name: install gpudirect
-        include_role:
-          name: mellanox-gpudirect
-
       when: ansible_local.hcas.count
