@@ -23,13 +23,15 @@ resource "aws_vpc" "default" {
 }
 
 data "aws_availability_zone" "default" {
+  count = var.zone != null ? 1 : 0
+
   state = "available"
   name  = var.zone
 }
 
 resource "aws_subnet" "public" {
   vpc_id            = aws_vpc.default.id
-  availability_zone = data.aws_availability_zone.default.name
+  availability_zone = var.zone != null ? data.aws_availability_zone.default[0].name : null
   cidr_block        = var.subnet_cidr.public
 
   tags = {
@@ -39,7 +41,7 @@ resource "aws_subnet" "public" {
 
 resource "aws_subnet" "private" {
   vpc_id            = aws_vpc.default.id
-  availability_zone = data.aws_availability_zone.default.name
+  availability_zone = var.zone != null ? data.aws_availability_zone.default[0].name : null
   cidr_block        = var.subnet_cidr.private
 
   tags = {
