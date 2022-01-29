@@ -39,11 +39,24 @@ resource "aws_launch_template" "default" {
   ebs_optimized = true
 
   network_interfaces {
+    device_index                = 0
+    network_card_index          = 0
     associate_public_ip_address = var.public
-    interface_type              = var.efa ? "efa" : "interface"
+    interface_type              = var.efa > 0 ? "efa" : "interface"
     subnet_id                   = var.subnet.id
     delete_on_termination       = true
     security_groups             = [var.firewall.id]
+  }
+  dynamic "network_interfaces" {
+    for_each = var.efa > 1 ? range(1, var.efa) : []
+    content {
+      device_index                = network_interfaces.value
+      network_card_index          = network_interfaces.value
+      interface_type              = "efa"
+      subnet_id                   = var.subnet.id
+      delete_on_termination       = true
+      security_groups             = [var.firewall.id]
+    }
   }
 
   tag_specifications {

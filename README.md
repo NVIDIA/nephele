@@ -18,7 +18,7 @@ chmod +x /usr/local/bin/terraform
 ### Install ansible
 ```bash
 apt install python3-pip
-pip3 install --upgrade ansible
+pip3 install --upgrade ansible netaddr
 ```
 
 ### Install provider CLI

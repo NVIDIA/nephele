@@ -27,7 +27,7 @@ module "instances_login" {
   cluster_id  = local.cluster_id
   name        = "${local.cluster_id}-login"
   type        = "m6i.4xlarge"
-  efa         = false
+  efa         = 0
   replicas    = 1
   public      = true
   preemptible = false
@@ -44,7 +44,7 @@ module "instances_x4v100" {
 
   cluster_id  = local.cluster_id
   name        = "${local.cluster_id}-x4v100"
-  efa         = false
+  efa         = 0
   type        = "p3.8xlarge"
   replicas    = var.replicas.x4v100
   public      = false
@@ -62,7 +62,7 @@ module "instances_x8v100" {
 
   cluster_id  = local.cluster_id
   name        = "${local.cluster_id}-x8v100"
-  efa         = true
+  efa         = 1
   type        = "p3dn.24xlarge"
   replicas    = var.replicas.x8v100
   public      = false
@@ -80,7 +80,7 @@ module "instances_x8a100" {
 
   cluster_id  = local.cluster_id
   name        = "${local.cluster_id}-x8a100"
-  efa         = true
+  efa         = 4
   type        = "p4d.24xlarge"
   replicas    = var.replicas.x8a100
   public      = false

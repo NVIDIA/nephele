@@ -37,3 +37,39 @@
     value: "0"
     sysctl_file: /etc/sysctl.d/50-ansible-role-efa.conf
     sysctl_set: yes
+
+- name: configure source based routing
+  blockinfile:
+    path: /etc/netplan/60-src-routing.yaml
+    create: yes
+    block: |
+      network:
+          version: 2
+          ethernets:
+              {% for iface in ansible_interfaces | sort | reject('eq', 'lo') -%}
+              {% set network = vars.ansible_facts[iface].ipv4.network + '/' + vars.ansible_facts[iface].ipv4.netmask -%}
+              {{ iface }}:
+                  routing-policy:
+                   - from: {{ vars.ansible_facts[iface].ipv4.address }}
+                     table: 10{{ loop.index }}
+                  routes:
+                   - to: {{ network | ansible.netcommon.ipaddr('net') }}
+                     scope: link
+                     table: 10{{ loop.index }}
+              {% endfor -%}
+  notify:
+    - netplan apply
+
+- name: configure arp filter
+  sysctl:
+    name: net.ipv4.conf.all.arp_filter
+    value: "1"
+    sysctl_file: /etc/sysctl.d/60-src-routing.conf
+    sysctl_set: yes
+
+- name: configure arp ignore
+  sysctl:
+    name: net.ipv4.conf.all.arp_ignore
+    value: "2"
+    sysctl_file: /etc/sysctl.d/60-src-routing.conf
+    sysctl_set: yes

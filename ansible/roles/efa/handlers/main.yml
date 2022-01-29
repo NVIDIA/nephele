@@ -13,12 +13,5 @@
 # limitations under the License.
 
 ---
-collections:
-  - name: community.general
-  - name: ansible.netcommon
-
-roles:
-  - name: nvidia.nvidia_driver
-  - name: nvidia.enroot
-  - name: lukeyeager.hosts
-    src: https://github.com/lukeyeager/ansible-role-hosts.git
+- name: netplan apply
+  command: netplan apply
