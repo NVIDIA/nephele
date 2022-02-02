@@ -15,6 +15,9 @@
 ---
 - hosts: all
   become: true
+  vars_files:
+    - ../vars/profiling.yml
+
   tasks:
     - name: enable profiling
       include_role:

@@ -1,10 +1,14 @@
 ---
 - hosts: nfs_server
   become: yes
+  vars_files:
+    - ../vars/nfs.yml
   roles:
     - { role: nfs, nfs_is_server: yes }
 
 - hosts: nfs_clients
   become: yes
+  vars_files:
+    - ../vars/nfs.yml
   roles:
     - { role: nfs, nfs_is_client: yes }

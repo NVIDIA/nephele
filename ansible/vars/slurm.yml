@@ -1,0 +1,45 @@
+# Copyright (c) 2020, NVIDIA CORPORATION. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+slurm_package_version: "21.08.5.1+nvidia-1"
+slurm_abi_version: "37"
+
+slurm_pyxis_package_version: "0.11.1-1"
+slurm_install_pyxis: yes
+
+slurm_control_deb_packages:
+  - "/nfs/packages/nvslurm-plugins_{{ slurm_package_version }}_amd64.deb"
+  - "/nfs/packages/nvslurm-control_{{ slurm_package_version }}_amd64.deb"
+slurm_compute_deb_packages:
+  - "/nfs/packages/nvslurm-plugins_{{ slurm_package_version }}_amd64.deb"
+  - "/nfs/packages/nvslurm-utils_{{ slurm_package_version }}_amd64.deb"
+  - "/nfs/packages/nvslurm-compute_{{ slurm_package_version }}_amd64.deb"
+  - "/nfs/packages/libslurm{{ slurm_abi_version }}_{{ slurm_package_version }}_amd64.deb"
+  - "/nfs/packages/libpam-slurm-adopt_{{ slurm_package_version }}_amd64.deb"
+slurm_client_deb_packages:
+  - "/nfs/packages/nvslurm-plugins_{{ slurm_package_version }}_amd64.deb"
+  - "/nfs/packages/nvslurm-utils_{{ slurm_package_version }}_amd64.deb"
+slurm_pyxis_deb_packages:
+  - "/nfs/packages/nvslurm-plugin-pyxis_{{ slurm_pyxis_package_version }}_amd64.deb"
+
+#slurm_cluster_name:
+#slurm_munge_key:
+
+slurm_config: |
+  PartitionName=batch Nodes=ALL Default=YES
+  PartitionName=hp Nodes=ALL PriorityTier=9
+slurm_partitions:
+  - x8a100
+

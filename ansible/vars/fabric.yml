@@ -13,23 +13,6 @@
 # limitations under the License.
 
 ---
-- hosts: all
-  become: true
-  vars_files:
-    - ../vars/fabric.yml
+mofed_package_version: "5.4-1.0.3.0"
 
-  tasks:
-    - name: install custom facts module
-      include_role:
-        name: facts
-
-    - block:
-      - name: install mofed
-        include_role:
-          name: mofed
-        when: ansible_local.hcas.count
-
-      - name: install efa
-        include_role:
-          name: efa
-        when: ansible_local.efas.count
+efa_installer_version: "1.14.1"

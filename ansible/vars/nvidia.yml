@@ -13,23 +13,15 @@
 # limitations under the License.
 
 ---
-- hosts: all
-  become: true
-  vars_files:
-    - ../vars/fabric.yml
+nvidia_driver_package_version: "470.103.01-1"
+nvidia_fabric_manager_package_version: "470.103.01-1"
 
-  tasks:
-    - name: install custom facts module
-      include_role:
-        name: facts
+nvidia_gdrcopy_package_version: "2.3-1"
 
-    - block:
-      - name: install mofed
-        include_role:
-          name: mofed
-        when: ansible_local.hcas.count
+nvidia_driver_ubuntu_install_from_cuda_repo: yes
+nvidia_driver_skip_reboot: yes
+nvidia_driver_module_params: "options nvidia NVreg_EnablePCIERelaxedOrderingMode=1 NVreg_RegistryDwords=\"RmEnableNvlinkReservedTpCounters=1\" nv_cap_enable_devfs=0"
 
-      - name: install efa
-        include_role:
-          name: efa
-        when: ansible_local.efas.count
+nvidia_gdrcopy_deb_packages:
+  - "/nfs/packages/gdrdrv-dkms_{{ nvidia_gdrcopy_package_version }}_amd64.deb"
+  - "/nfs/packages/libgdrapi_{{ nvidia_gdrcopy_package_version }}_amd64.deb"

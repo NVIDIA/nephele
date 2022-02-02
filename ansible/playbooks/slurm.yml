@@ -15,6 +15,9 @@
 ---
 - hosts: all
   become: true
+  vars_files:
+    - ../vars/slurm.yml
+
   tasks:
     - name: install custom facts module
       include_role:

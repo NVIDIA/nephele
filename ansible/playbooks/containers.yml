@@ -15,6 +15,9 @@
 ---
 - hosts: all
   become: true
+  vars_files:
+    - ../vars/containers.yml
+
   tasks:
     - name: install custom facts module
       include_role:
@@ -32,6 +35,20 @@
           tags:
             - libnvidia_container
       when: ansible_local.gpus.count
+      tags:
+        - always
+
+    - name: set efa enroot config
+      set_fact:
+        enroot_mount_config_files: "{{ enroot_mount_config_files | default([]) + efa_enroot_mount_config_files }}"
+      when: ansible_local.efas.count
+      tags:
+        - always
+
+    - name: set mofed enroot config
+      set_fact:
+        enroot_environ_config_files: "{{ enroot_environ_config_files | default([]) + mofed_enroot_environ_config_files }}"
+      when: ansible_local.hcas.count
       tags:
         - always
 
