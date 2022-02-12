@@ -1,0 +1,50 @@
+#ENROOT_REMAP_ROOT=y
+#ENROOT_ROOTFS_WRITABLE=y
+#ENROOT_ROOTFS=nephele
+
+# Copyright (c) 2022, NVIDIA CORPORATION. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+rc() {
+    set -eux
+
+    apt-get -y update && apt-get -y install --no-install-recommends \
+        gnupg2 \
+        ca-certificates \
+        build-essential \
+        apt-utils
+
+    echo "deb [arch=amd64] https://apt.releases.hashicorp.com focal main" > /etc/apt/sources.list.d/terraform.list
+    apt-key adv --fetch-keys https://apt.releases.hashicorp.com/gpg
+
+    echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ focal main" > /etc/apt/sources.list.d/azure-cli.list
+    apt-key adv --fetch-keys https://packages.microsoft.com/keys/microsoft.asc
+
+    apt-get -y update && apt-get -y install --no-install-recommends \
+        azure-cli \
+        terraform \
+        ansible \
+        openssh-client \
+        vim \
+        git \
+        python-netaddr
+
+    rm -rf /var/lib/apt/lists/*
+
+    git clone --recurse-submodules https://github.com/NVIDIA/nephele.git /usr/local/src/nephele
+    chmod 755 /usr/local/src/nephele
+
+    echo '${ENROOT_ROOTFS}/usr/local/src/nephele/packages /mnt' >> /etc/fstab
+    echo 'cd /usr/local/src/nephele && exec /bin/bash' > /etc/rc
+}

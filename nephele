@@ -18,7 +18,7 @@ set -eu
 
 source nephele.conf
 
-cmds=("enroot" "terraform" "ansible")
+cmds=("terraform" "ansible")
 
 case "${CLOUD_PROVIDER}" in
 azure)
