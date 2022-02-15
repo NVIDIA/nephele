@@ -36,6 +36,7 @@ rc() {
         terraform \
         ansible \
         openssh-client \
+        rsync \
         vim \
         git \
         python-netaddr
