@@ -39,7 +39,9 @@ resource "azurerm_resource_group" "default" {
   location = var.region
 
   timeouts {
+    read   = "15m"
     create = "3h"
+    update = "3h"
     delete = "3h"
   }
 }
