@@ -65,7 +65,7 @@ init() {
 create() {
     [ -n "${CLOUD_REGION-}" ] && export TF_VAR_region="${CLOUD_REGION}"
     [ -n "${CLOUD_ZONE-}" ] && export TF_VAR_zone="${CLOUD_ZONE}"
-    export TF_VAR_replicas="{ x4v100 = ${REPLICAS_x4v100}, x8v100 = ${REPLICAS_x8v100}, x8a100 = ${REPLICAS_x8a100} }" # FIXME doesn't seem to work for some reason
+    export TF_VAR_replicas="{ x4v100 = ${REPLICAS_x4v100}, x8v100 = ${REPLICAS_x8v100}, x8a100_40g = ${REPLICAS_x8a100_40g}, x8a100_80g = ${REPLICAS_x8a100_80g} }" # FIXME doesn't seem to work for some reason
 
     case "${1-}" in
     --yes|-y) export TF_CLI_ARGS_apply="-auto-approve" ;;

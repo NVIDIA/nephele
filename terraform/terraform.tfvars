@@ -41,5 +41,6 @@ ansible = {
 replicas = {
   x4v100 = 0
   x8v100 = 0
-  x8a100 = 0
+  x8a100_40g = 0
+  x8a100_80g = 0
 }
