@@ -75,14 +75,14 @@ module "instances_x8v100" {
   firewall    = aws_security_group.default
 }
 
-module "instances_x8a100" {
+module "instances_x8a100_40g" {
   source = "./instance"
 
   cluster_id  = local.cluster_id
   name        = "${local.cluster_id}-x8a100"
   efa         = 4
   type        = "p4d.24xlarge"
-  replicas    = var.replicas.x8a100
+  replicas    = var.replicas.x8a100_40g
   public      = false
   preemptible = var.preemptible
 
