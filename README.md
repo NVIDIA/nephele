@@ -4,29 +4,45 @@
 
 ### Install enroot
 ```bash
-curl -fSsL -O https://github.com/NVIDIA/enroot/releases/download/v3.4.0/enroot_3.4.0-1_amd64.deb
-curl -fSsL -O https://github.com/NVIDIA/enroot/releases/download/v3.4.0/enroot+caps_3.4.0-1_amd64.deb
-apt install -y ./*.deb
+sudo apt update -y
+arch=$(dpkg --print-architecture)
+echo $arch
+
+curl -fSsL -O https://github.com/NVIDIA/enroot/releases/download/v3.4.0/enroot_3.4.0-1_${arch}.deb
+curl -fSsL -O https://github.com/NVIDIA/enroot/releases/download/v3.4.0/enroot+caps_3.4.0-1_${arch}.deb
+sudo apt install -y ./*.deb
+rm enroot*
 ```
 
-### Install terraform
+### Install terraform and ansible
 ```bash
-curl -fSsL https://releases.hashicorp.com/terraform/1.1.4/terraform_1.1.4_windows_amd64.zip | zcat > /usr/local/bin/terraform
-chmod +x /usr/local/bin/terraform
+curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+sudo apt-add-repository "deb [arch=$(dpkg --print-architecture)] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+sudo apt update
+sudo apt install -y build-essential terraform ansible
 ```
 
-### Install ansible
+### Check installation
 ```bash
-apt install python3-pip
-pip3 install --upgrade ansible netaddr
+terraform --version
+ansible --version
 ```
 
-### Install provider CLI
-#### Azure
+### If using Azure, additionally install the Azure CLI
 https://docs.microsoft.com/en-us/cli/azure/install-azure-cli
+```bash
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+az login
+```
 
 
 ## Setup
+
+### Cloning the repo
+Remember to include the recursive flag for submodules.
+```bash
+git clone --recursive https://github.com/NVIDIA/nephele.git
+```
 
 ### Edit cluster configuration
 ```bash
@@ -35,6 +51,7 @@ vi nephele.conf
 
 ### One time setup
 ```bash
+export CONTAINERIZED_BUILD=1
 ./nephele init
 ```
 
