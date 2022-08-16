@@ -61,8 +61,14 @@ export CONTAINERIZED_BUILD=1
 ```
 
 ### Connect to the cluster
+Headnode:
 ```bash
 ./nephele connect
+```
+
+Specific compute node - e.g. x8a100-0000
+```
+./nephele connect x8a100-0000
 ```
 
 ### Destroy the cluster
