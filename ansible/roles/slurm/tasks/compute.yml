@@ -102,7 +102,7 @@
     state: started
 
 - name: remove pam_systemd
-  community.general.pamd:
+  pamd:
     name: common-session
     type: session
     control: optional
@@ -111,7 +111,7 @@
     state: absent
 
 - name: configure pam_slurm_adopt
-  community.general.pamd:
+  pamd:
     name: sshd
     type: session
     control: '[success=ok ignore=ignore module_unknown=ignore default=bad]'

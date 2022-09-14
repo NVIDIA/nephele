@@ -24,17 +24,17 @@ output "x8v100" {
   value = module.instances_x8v100.private_ips
 }
 
-output "x8a100_40g" {
-  value = module.instances_x8a100_40g.private_ips
+output "x8a100" {
+  value = module.instances_x8a100.private_ips
 }
 
 resource "local_file" "ansible_inventory" {
   filename = var.ansible.inventory
   content  = templatefile("${var.ansible.inventory}.tf", {
-    login      = module.instances_login.public_ips,
-    x4v100     = module.instances_x4v100.private_ips,
-    x8v100     = module.instances_x8v100.private_ips,
-    x8a100_40g = module.instances_x8a100_40g.private_ips,
+    login  = module.instances_login.public_ips,
+    x4v100 = module.instances_x4v100.private_ips,
+    x8v100 = module.instances_x8v100.private_ips,
+    x8a100 = module.instances_x8a100.private_ips,
   })
 }
 
@@ -45,7 +45,7 @@ resource "local_file" "ssh_known_hosts" {
     login       = module.instances_login.public_ips,
     x4v100      = module.instances_x4v100.private_ips,
     x8v100      = module.instances_x8v100.private_ips,
-    x8a100_40g  = module.instances_x8a100_40g.private_ips,
+    x8a100      = module.instances_x8a100.private_ips,
   })
 }
 
@@ -58,6 +58,6 @@ resource "local_file" "ssh_config" {
     login       = module.instances_login.public_ips,
     x4v100      = module.instances_x4v100.private_ips,
     x8v100      = module.instances_x8v100.private_ips,
-    x8a100_40g  = module.instances_x8a100_40g.private_ips,
+    x8a100      = module.instances_x8a100.private_ips,
   })
 }
