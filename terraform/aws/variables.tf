@@ -73,9 +73,9 @@ variable "ansible" {
 variable "replicas" {
   description = "Number of instance replicas"
   type        = object({
-    x4v100     = number
-    x8v100     = number
-    x8a100_40g = number
+    x4v100 = number
+    x8v100 = number
+    x8a100 = number
   })
   default     = null
 }
