@@ -53,7 +53,7 @@
                    - from: {{ vars.ansible_facts[iface].ipv4.address }}
                      table: 10{{ loop.index }}
                   routes:
-                   - to: {{ network | ansible.netcommon.ipaddr('net') }}
+                   - to: {{ network | ansible.utils.ipaddr('net') }}
                      scope: link
                      table: 10{{ loop.index }}
               {% endfor -%}
