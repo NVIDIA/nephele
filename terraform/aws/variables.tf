@@ -37,8 +37,8 @@ variable "subnet_cidr" {
     private = string
   })
   default     = {
-    public  = "10.0.100.0/24"
-    private = "10.0.200.0/24"
+    public  = "10.0.0.0/17"
+    private = "10.0.128.0/17"
   }
 }
 
