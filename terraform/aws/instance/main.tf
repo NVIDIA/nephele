@@ -76,6 +76,7 @@ resource "aws_autoscaling_group" "default" {
   max_size            = var.replicas
   min_size            = var.replicas
   desired_capacity    = var.replicas
+  wait_for_capacity_timeout = "30m"
 
   launch_template {
     id      = aws_launch_template.default.id
